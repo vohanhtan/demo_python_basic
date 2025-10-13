@@ -352,12 +352,14 @@ def _show_charts(result_json: dict, df: pd.DataFrame):
         )
         st.pyplot(fig)
     else:
+        print('asdhfalksdfj')
         fig = create_combined_chart(
             df, 
             result_json['symbol'], 
             result_json.get('forecast_next_days')
         )
         st.pyplot(fig)
+        print('21342342423423')
 
 
 def _show_json_result(result_json: dict):

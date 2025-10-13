@@ -27,14 +27,14 @@ def forecast_price_regression(df: pd.DataFrame, horizon_days: int = 5) -> Dict:
         - reason: lý do tín hiệu
     """
     if df.empty or len(df) < 10:
-        return _get_default_prediction(horizon_days, "Dữ liệu không đủ để dự đoán")
+        return _get_default_prediction(horizon_days, "Dữ liệu không đủ để dự đoán", df)
     
     try:
         # Chuẩn bị dữ liệu
         X, y = _prepare_regression_data(df)
         
         if len(X) < 5:
-            return _get_default_prediction(horizon_days, "Dữ liệu quá ít để huấn luyện mô hình")
+            return _get_simple_prediction(df, horizon_days, "Dữ liệu quá ít để huấn luyện mô hình")
         
         # Huấn luyện mô hình Linear Regression
         model = LinearRegression()
@@ -61,7 +61,7 @@ def forecast_price_regression(df: pd.DataFrame, horizon_days: int = 5) -> Dict:
         }
         
     except Exception as e:
-        return _get_default_prediction(horizon_days, f"Lỗi dự đoán: {str(e)}")
+        return _get_simple_prediction(df, horizon_days, f"Lỗi dự đoán: {str(e)}")
 
 
 def _prepare_regression_data(df: pd.DataFrame) -> tuple:
@@ -204,23 +204,92 @@ def _generate_trading_signal(df: pd.DataFrame, trend: str, forecast_prices: List
             return "HOLD", "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng"
 
 
-def _get_default_prediction(horizon_days: int, reason: str) -> Dict:
+def _get_default_prediction(horizon_days: int, reason: str, df: pd.DataFrame = None) -> Dict:
     """
     Trả về dự đoán mặc định khi có lỗi
     
     Args:
         horizon_days: Số ngày dự đoán
         reason: Lý do lỗi
+        df: DataFrame dữ liệu (tùy chọn)
         
     Returns:
         Dictionary dự đoán mặc định
     """
+    # Sử dụng giá thực từ DataFrame nếu có
+    if df is not None and not df.empty:
+        current_price = df['Close'].iloc[-1]
+    else:
+        current_price = 100.0  # Giá mặc định chỉ khi không có dữ liệu
+    
+    forecast_prices = []
+    
+    for i in range(horizon_days):
+        # Dự đoán đơn giản: giá tăng nhẹ theo thời gian
+        predicted_price = current_price * (1 + 0.001 * (i + 1))
+        forecast_prices.append(round(predicted_price, 2))
+    
     return {
         "trend": "Sideways",
         "forecast_horizon_days": horizon_days,
-        "forecast_next_days": [0.0] * horizon_days,
+        "forecast_next_days": forecast_prices,
         "signal": "HOLD",
         "reason": reason
+    }
+
+
+def _get_simple_prediction(df: pd.DataFrame, horizon_days: int, reason: str) -> Dict:
+    """
+    Tạo dự đoán đơn giản dựa trên dữ liệu thực
+    
+    Args:
+        df: DataFrame dữ liệu
+        horizon_days: Số ngày dự đoán
+        reason: Lý do lỗi
+        
+    Returns:
+        Dictionary dự đoán đơn giản
+    """
+    if df.empty:
+        return _get_default_prediction(horizon_days, reason, df)
+    
+    # Lấy giá hiện tại
+    current_price = df['Close'].iloc[-1]
+    
+    # Tính xu hướng đơn giản dựa trên 5 ngày gần nhất
+    recent_prices = df['Close'].tail(5).values
+    if len(recent_prices) >= 2:
+        price_change = (recent_prices[-1] - recent_prices[0]) / recent_prices[0]
+        daily_change = price_change / len(recent_prices)
+    else:
+        daily_change = 0.001  # Tăng nhẹ mặc định
+    
+    # Tạo dự đoán
+    forecast_prices = []
+    for i in range(horizon_days):
+        predicted_price = current_price * (1 + daily_change * (i + 1))
+        forecast_prices.append(round(predicted_price, 2))
+    
+    # Xác định xu hướng
+    if daily_change > 0.002:
+        trend = "Uptrend"
+        signal = "BUY"
+        signal_reason = "Xu hướng tăng dựa trên dữ liệu gần đây"
+    elif daily_change < -0.002:
+        trend = "Downtrend"
+        signal = "SELL"
+        signal_reason = "Xu hướng giảm dựa trên dữ liệu gần đây"
+    else:
+        trend = "Sideways"
+        signal = "HOLD"
+        signal_reason = "Xu hướng sideways, biến động nhỏ"
+    
+    return {
+        "trend": trend,
+        "forecast_horizon_days": horizon_days,
+        "forecast_next_days": forecast_prices,
+        "signal": signal,
+        "reason": f"{signal_reason}. {reason}"
     }
 
 

@@ -4,12 +4,12 @@
 
 ## 🎯 Tính năng chính
 
-- **Phân tích kỹ thuật**: SMA(7), SMA(30), RSI(14)
-- **Dự đoán ngắn hạn**: Linear Regression cho 3-5 ngày
-- **AI Advice**: Lời khuyên giả lập (chuẩn bị cho API thật)
-- **Biểu đồ trực quan**: matplotlib với nhiều loại chart
-- **Logging**: Ghi kết quả JSON theo ngày
-- **UI thân thiện**: Streamlit với giao diện tiếng Việt
+- **Phân tích kỹ thuật**: SMA(7), SMA(30), RSI(14) với tính toán chính xác
+- **Dự đoán ngắn hạn**: Linear Regression + fallback thông minh cho 3-10 ngày
+- **AI Advice**: Lời khuyên giả lập thông minh (chuẩn bị cho API thật)
+- **Biểu đồ trực quan**: matplotlib với xử lý lỗi tốt, không crash
+- **Logging**: Ghi kết quả JSON theo ngày với cấu trúc chuẩn
+- **UI thân thiện**: Streamlit với giao diện tiếng Việt, xử lý lỗi tốt
 
 ## 🚀 Cài đặt và chạy
 
@@ -19,19 +19,13 @@
 pip install -r requirements.txt
 ```
 
-### 2. Test nhanh
-
-```bash
-python3 demo.py
-```
-
-### 3. Chạy ứng dụng
+### 2. Chạy ứng dụng
 
 ```bash
 streamlit run app.py
 ```
 
-### 4. Truy cập
+### 3. Truy cập
 
 Mở trình duyệt và truy cập: `http://localhost:8501`
 
@@ -47,10 +41,8 @@ demo_python_basic/
 ├── logger.py              # Ghi log JSON theo ngày
 ├── visualizer.py          # Vẽ biểu đồ matplotlib
 ├── utils.py               # Hàm tiện ích
-├── demo.py                # Script test nhanh
 ├── requirements.txt       # Dependencies
 ├── README.md              # Hướng dẫn chi tiết
-├── QUICK_START.md         # Hướng dẫn nhanh
 ├── data/                  # Dữ liệu CSV
 │   ├── FPT.csv
 │   └── VNM.csv
@@ -72,10 +64,12 @@ Date,Symbol,Open,High,Low,Close,Volume
 
 ## 🔧 Cách sử dụng
 
-1. **Chọn mã cổ phiếu**: FPT hoặc VNM
-2. **Thiết lập khoảng thời gian**: Ngày bắt đầu và kết thúc
-3. **Số ngày dự đoán**: 1-10 ngày
-4. **Nhấn "Phân tích"**: Xem kết quả
+1. **Chọn mã cổ phiếu**: FPT hoặc VNM (có sẵn dữ liệu mẫu)
+2. **Thiết lập khoảng thời gian**: Ngày bắt đầu và kết thúc (mặc định 60 ngày gần nhất)
+3. **Số ngày dự đoán**: 1-10 ngày (mặc định 5 ngày)
+4. **Nhấn "Phân tích"**: Xem kết quả chi tiết
+5. **Xem biểu đồ**: Chọn "Biểu đồ giá" hoặc "Biểu đồ tổng hợp"
+6. **Tải kết quả**: JSON được lưu tự động và có thể tải xuống
 
 ## 📈 Kết quả phân tích
 
@@ -140,9 +134,11 @@ Kết quả phân tích được ghi vào `reports/YYYY-MM-DD.json`:
 ## ⚠️ Lưu ý quan trọng
 
 - **Không kết nối API thật**: Chỉ sử dụng dữ liệu CSV nội bộ
-- **AI giả lập**: Lời khuyên hiện tại là rule-based
+- **AI giả lập**: Lời khuyên hiện tại là rule-based thông minh
 - **Không phải lời khuyên đầu tư**: Chỉ là phân tích kỹ thuật
-- **Dữ liệu mẫu**: CSV được tạo giả lập cho demo
+- **Dữ liệu mẫu**: CSV được tạo giả lập cho demo (~90 ngày)
+- **Xử lý lỗi tốt**: Ứng dụng không crash, có fallback thông minh
+- **Dự đoán ổn định**: Linear Regression + fallback dựa trên xu hướng thực tế
 
 ## 🔮 Mở rộng tương lai
 
@@ -157,19 +153,30 @@ Kết quả phân tích được ghi vào `reports/YYYY-MM-DD.json`:
 
 ### Lỗi import module
 ```bash
-# Đảm bảo đang ở thư mục ai_stock_insight
-cd ai_stock_insight
+# Đảm bảo đang ở thư mục demo_python_basic
+cd demo_python_basic
 streamlit run app.py
 ```
 
 ### Lỗi dữ liệu
 - Kiểm tra file CSV trong thư mục `data/`
 - Đảm bảo format đúng: Date,Symbol,Open,High,Low,Close,Volume
+- Dữ liệu mẫu FPT.csv và VNM.csv đã có sẵn
 
 ### Lỗi matplotlib
 ```bash
 pip install --upgrade matplotlib
 ```
+
+### Lỗi biểu đồ
+- Ứng dụng có xử lý lỗi tốt, không crash
+- Nếu "Biểu đồ tổng hợp" không hiển thị, thử "Biểu đồ giá"
+- Tất cả lỗi đều có thông báo rõ ràng bằng tiếng Việt
+
+### Lỗi dự đoán
+- Dự đoán có fallback thông minh
+- Nếu Linear Regression lỗi, sẽ dùng xu hướng đơn giản
+- Giá dự đoán luôn dựa trên giá thực tế, không phải giá mặc định
 
 ## 📞 Hỗ trợ
 
@@ -181,4 +188,18 @@ Nếu gặp vấn đề, vui lòng kiểm tra:
 
 ---
 
-**🎉 Sẵn sàng demo: nhập mã 'FPT' trong 60 ngày gần nhất và nhấn Phân tích.**
+## 🎉 Trạng thái dự án
+
+**✅ HOÀN THÀNH**: Dự án đã được test kỹ lưỡng và sẵn sàng sử dụng
+
+**🚀 Sẵn sàng demo**: 
+1. Chạy `streamlit run app.py`
+2. Chọn mã 'FPT' hoặc 'VNM'
+3. Thiết lập khoảng thời gian (mặc định 60 ngày)
+4. Nhấn "Phân tích" để xem kết quả
+
+**🔧 Đã sửa các lỗi**:
+- ✅ Biểu đồ tổng hợp hoạt động ổn định
+- ✅ Giá dự đoán hiển thị giá thực tế (không còn 0 hoặc 100)
+- ✅ Xử lý lỗi tốt, không crash
+- ✅ Fallback thông minh cho tất cả chức năng

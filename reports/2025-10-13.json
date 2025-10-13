@@ -210,6 +210,163 @@
         167.8,
         168.51
       ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "Phân tích cho thấy FPT đang trong giai đoạn chờ đợi. RSI quá mua, chờ điều chỉnh. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:50:22",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 155.34,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        165.65,
+        166.37,
+        167.08,
+        167.8,
+        168.51
+      ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "Tín hiệu chưa rõ ràng cho FPT, nên quan sát thêm. RSI quá mua, chờ điều chỉnh. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:51:41",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 155.34,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        165.65,
+        166.37,
+        167.08,
+        167.8,
+        168.51,
+        169.23,
+        169.94,
+        170.66,
+        171.38,
+        172.09
+      ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 163.0,
+      "trend": "Sideways",
+      "signal": "HOLD",
+      "reason": "Dữ liệu không đủ để dự đoán",
+      "ai_advice": "AI khuyến nghị giữ nguyên vị thế FPT hiện tại. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:52:15",
+      "technical_indicators": {
+        "SMA7": 162.7,
+        "SMA30": 162.7,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Sideways",
+      "signal": "HOLD",
+      "reason": "Dữ liệu không đủ để dự đoán",
+      "ai_advice": "Tín hiệu chưa rõ ràng cho FPT, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:55:17",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 162.33,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        100.1,
+        100.2,
+        100.3,
+        100.4,
+        100.5
+      ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Sideways",
+      "signal": "HOLD",
+      "reason": "Dữ liệu không đủ để dự đoán",
+      "ai_advice": "Tín hiệu chưa rõ ràng cho FPT, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:58:05",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 162.66,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        165.16,
+        165.33,
+        165.49,
+        165.66,
+        165.82
+      ]
+    },
+    {
+      "symbol": "VNM",
+      "latest_price": 108.8,
+      "trend": "Sideways",
+      "signal": "HOLD",
+      "reason": "Dữ liệu không đủ để dự đoán",
+      "ai_advice": "Phân tích cho thấy VNM đang trong giai đoạn chờ đợi. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:58:35",
+      "technical_indicators": {
+        "SMA7": 106.8,
+        "SMA30": 106.46,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        108.91,
+        109.02,
+        109.13,
+        109.24,
+        109.34
+      ]
+    },
+    {
+      "symbol": "VNM",
+      "latest_price": 108.8,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "AI khuyến nghị giữ nguyên vị thế VNM hiện tại. RSI quá mua, chờ điều chỉnh. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:58:56",
+      "technical_indicators": {
+        "SMA7": 106.8,
+        "SMA30": 99.13,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        109.47,
+        113.53,
+        117.6,
+        121.67,
+        125.74
+      ]
     }
   ]
 }
