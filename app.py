@@ -18,7 +18,8 @@ from logger import append_daily_log
 from visualizer import make_price_chart, create_combined_chart
 from utils import (
     get_default_date_range, validate_symbol, validate_date_range,
-    get_current_datetime_iso, truncate_json_for_display
+    get_current_datetime_iso, truncate_json_for_display, normalize_symbol,
+    get_config, is_data_short
 )
 
 
@@ -143,7 +144,7 @@ def _perform_analysis(symbol: str, start_date, end_date, forecast_days: int):
     
     # Validate input
     try:
-        symbol = validate_symbol(symbol)
+        symbol = normalize_symbol(symbol)
         start_date_str = start_date.strftime('%Y-%m-%d')
         end_date_str = end_date.strftime('%Y-%m-%d')
         validate_date_range(start_date_str, end_date_str)
@@ -162,8 +163,8 @@ def _perform_analysis(symbol: str, start_date, end_date, forecast_days: int):
         
         df = get_stock_data(symbol, start_date_str, end_date_str)
         
-        if len(df) < 10:
-            st.warning("⚠️ Dữ liệu ngắn, kết quả có thể thiếu ổn định.")
+        if is_data_short(df):
+            st.warning("⚠️ Dữ liệu ngắn, kết quả có thể thiếu ổn định. Một số chỉ báo có thể chưa phản ánh đúng xu hướng.")
         
         # Bước 2: Tính chỉ báo kỹ thuật
         status_text.text("📊 Đang tính chỉ báo kỹ thuật...")
@@ -207,7 +208,8 @@ def _perform_analysis(symbol: str, start_date, end_date, forecast_days: int):
         _display_results(result_json, df_with_indicators, log_result)
         
     except FileNotFoundError as e:
-        st.error(f"❌ {str(e)}")
+        st.error(f"❌ Không tìm thấy dữ liệu cho mã {symbol}. Kiểm tra file data/{symbol}.csv.")
+        st.stop()
     except ValueError as e:
         st.error(f"❌ Lỗi dữ liệu: {str(e)}")
     except Exception as e:
@@ -247,13 +249,10 @@ def _display_results(result_json: dict, df: pd.DataFrame, log_result: dict):
     """Hiển thị kết quả phân tích"""
     
     # Thông báo log
-    st.success(
-        f"✅ Đã ghi 1 bản ghi vào {log_result['file_path']} — "
-        f"Tổng hôm nay: {log_result['total_records_today']}"
-    )
+    st.success(f"✅ Đã ghi vào {log_result['file_path']} — Tổng số hôm nay: {log_result['total_records_today']}")
     
     # Tabs cho kết quả
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Tổng quan", "📈 Biểu đồ", "📋 JSON", "🤖 AI Advice"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Tổng quan", "📈 Biểu đồ", "📋 Kết quả JSON", "🤖 Lời khuyên AI", "📤 Xuất báo cáo"])
     
     with tab1:
         _show_overview(result_json, df)
@@ -266,6 +265,9 @@ def _display_results(result_json: dict, df: pd.DataFrame, log_result: dict):
     
     with tab4:
         _show_ai_advice(result_json)
+    
+    with tab5:
+        _show_export_tab()
 
 
 def _show_overview(result_json: dict, df: pd.DataFrame):
@@ -280,25 +282,20 @@ def _show_overview(result_json: dict, df: pd.DataFrame):
         )
     
     with col2:
-        trend_emoji = {"Uptrend": "📈", "Downtrend": "📉", "Sideways": "➡️"}
-        st.metric(
-            "📊 Xu hướng",
-            f"{trend_emoji.get(result_json['trend'], '➡️')} {result_json['trend']}"
-        )
+        trend = result_json['trend']
+        trend_display = "📈 Tăng" if trend == "Uptrend" else "📉 Giảm" if trend == "Downtrend" else "➖ Đi ngang"
+        st.metric("📈 Xu hướng", trend_display, delta=None)
     
     with col3:
-        signal_emoji = {"BUY": "🟢", "SELL": "🔴", "HOLD": "🟡"}
-        st.metric(
-            "🎯 Tín hiệu",
-            f"{signal_emoji.get(result_json['signal'], '🟡')} {result_json['signal']}"
-        )
+        signal = result_json['signal']
+        signal_display = "🟢 MUA" if signal == "BUY" else "🔴 BÁN" if signal == "SELL" else "⚪ GIỮ"
+        st.metric("💡 Tín hiệu", signal_display, delta=None)
     
     with col4:
-        confidence = get_ai_confidence_score(result_json)
-        st.metric(
-            "🎲 Độ tin cậy",
-            f"{confidence:.1%}"
-        )
+        from ai_module import get_market_sentiment
+        sentiment = get_market_sentiment(result_json['symbol'], result_json)
+        sentiment_display = "😊 Tích cực" if sentiment == "Bullish" else "😐 Trung lập" if sentiment == "Neutral" else "😟 Tiêu cực"
+        st.metric("🧠 Sentiment", sentiment_display, delta=None)
     
     # Chỉ báo kỹ thuật
     st.subheader("📊 Chỉ báo kỹ thuật")
@@ -338,28 +335,13 @@ def _show_overview(result_json: dict, df: pd.DataFrame):
 def _show_charts(result_json: dict, df: pd.DataFrame):
     """Hiển thị biểu đồ"""
     
-    chart_type = st.radio(
-        "Loại biểu đồ",
-        ["Biểu đồ giá", "Biểu đồ tổng hợp"],
-        horizontal=True
-    )
+    chart_mode = st.radio("🎨 Chọn loại biểu đồ", ["Biểu đồ giá", "Biểu đồ tổng hợp"])
     
-    if chart_type == "Biểu đồ giá":
-        fig = make_price_chart(
-            df, 
-            result_json['symbol'], 
-            result_json.get('forecast_next_days')
-        )
-        st.pyplot(fig)
+    if chart_mode == "Biểu đồ tổng hợp":
+        fig = create_combined_chart(df, result_json['symbol'])
     else:
-        print('asdhfalksdfj')
-        fig = create_combined_chart(
-            df, 
-            result_json['symbol'], 
-            result_json.get('forecast_next_days')
-        )
-        st.pyplot(fig)
-        print('21342342423423')
+        fig = make_price_chart(df, result_json['symbol'])
+    st.pyplot(fig)
 
 
 def _show_json_result(result_json: dict):
@@ -413,5 +395,31 @@ def _show_ai_advice(result_json: dict):
     )
 
 
+def _show_export_tab():
+    """Hiển thị tab xuất báo cáo"""
+    st.subheader("📤 Xuất dữ liệu báo cáo")
+    
+    export_format = get_config("EXPORT_FORMAT", "both")
+    
+    st.info(f"💡 Định dạng xuất hiện tại: **{export_format}** (cấu hình trong .env)")
+    
+    if st.button("📄 Xuất báo cáo hôm nay", type="primary"):
+        try:
+            from logger import export_today_report
+            export_result = export_today_report(export_format)
+            st.success(export_result)
+        except Exception as e:
+            st.error(f"❌ Lỗi xuất báo cáo: {str(e)}")
+    
+    # Hiển thị thông tin về file log
+    st.subheader("📁 Thông tin file log")
+    report_dir = get_config("REPORT_DIR", "reports")
+    st.write(f"**Thư mục lưu log:** `{report_dir}/`")
+    st.write(f"**Định dạng file:** `YYYY-MM-DD.json`")
+    st.write(f"**File xuất:** `YYYY-MM-DD_report.csv/pdf`")
+
+
 if __name__ == "__main__":
     main()
+    st.caption("🎯 Project AI Stock Insight đã sẵn sàng chạy thử — nhập mã 'FPT' và chọn khoảng 60 ngày gần nhất để phân tích.")
+    print("🎉 Dự án AI Stock Insight đã được nâng cấp và sẵn sàng demo.")

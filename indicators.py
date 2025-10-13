@@ -22,10 +22,10 @@ def add_moving_averages(df: pd.DataFrame, short: int = 7, long: int = 30) -> pd.
     """
     df = df.copy()
     
-    # Tính SMA ngắn hạn
+    # Tính SMA ngắn hạn với min_periods để tránh NaN
     df[f'SMA{short}'] = df['Close'].rolling(window=short, min_periods=1).mean()
     
-    # Tính SMA dài hạn
+    # Tính SMA dài hạn với min_periods để tránh NaN
     df[f'SMA{long}'] = df['Close'].rolling(window=long, min_periods=1).mean()
     
     return df
@@ -48,25 +48,63 @@ def add_rsi(df: pd.DataFrame, period: int = 14) -> pd.DataFrame:
     """
     df = df.copy()
     
-    # Tính thay đổi giá
-    delta = df['Close'].diff()
+    try:
+        # Kiểm tra dữ liệu đủ để tính RSI
+        if len(df) < 15:
+            print("⚠️ Dữ liệu quá ngắn, RSI có thể không chính xác.")
+        
+        if len(df) < period + 1:
+            print(f"⚠️ Warning: Dữ liệu không đủ để tính RSI({period}). Cần ít nhất {period + 1} ngày, hiện có {len(df)} ngày.")
+            df[f'RSI{period}'] = None
+            return df
+        
+        # Tính thay đổi giá
+        delta = df['Close'].diff()
+        
+        # Tách gain và loss
+        gain = delta.where(delta > 0, 0)
+        loss = -delta.where(delta < 0, 0)
+        
+        # Tính trung bình gain và loss (sử dụng exponential moving average)
+        avg_gain = gain.ewm(span=period, adjust=False).mean()
+        avg_loss = loss.ewm(span=period, adjust=False).mean()
+        
+        # Tính RS và RSI
+        rs = avg_gain / avg_loss
+        rsi = 100 - (100 / (1 + rs))
+        
+        # Thêm cột RSI vào DataFrame với min_periods=1 để tránh NaN
+        df[f'RSI{period}'] = rsi
+        
+    except Exception as e:
+        print(f"⚠️ Warning: Không thể tính RSI({period}): {str(e)}")
+        df[f'RSI{period}'] = None
     
-    # Tách gain và loss
+    return df
+
+
+def calculate_rsi(prices, period=14):
+    """
+    Tính RSI với min_periods=1 để tránh NaN
+    
+    Args:
+        prices: Series giá đóng cửa
+        period: Chu kỳ RSI
+        
+    Returns:
+        Series RSI
+    """
+    delta = prices.diff()
     gain = delta.where(delta > 0, 0)
     loss = -delta.where(delta < 0, 0)
     
-    # Tính trung bình gain và loss (sử dụng exponential moving average)
-    avg_gain = gain.ewm(span=period, adjust=False).mean()
-    avg_loss = loss.ewm(span=period, adjust=False).mean()
+    avg_gain = gain.ewm(span=period, adjust=False, min_periods=1).mean()
+    avg_loss = loss.ewm(span=period, adjust=False, min_periods=1).mean()
     
-    # Tính RS và RSI
     rs = avg_gain / avg_loss
     rsi = 100 - (100 / (1 + rs))
     
-    # Thêm cột RSI vào DataFrame
-    df[f'RSI{period}'] = rsi
-    
-    return df
+    return rsi
 
 
 def add_indicators(df: pd.DataFrame) -> pd.DataFrame:

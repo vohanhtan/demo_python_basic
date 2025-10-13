@@ -9,7 +9,8 @@ import os
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List
-from utils import get_current_datetime_iso
+import pandas as pd
+from utils import get_current_datetime_iso, get_config
 
 
 def append_daily_log(record: Dict) -> Dict:
@@ -52,8 +53,8 @@ def append_daily_log(record: Dict) -> Dict:
     _save_daily_log(log_file, daily_data)
     
     return {
-        'file_path': str(log_file),
-        'total_records_today': len(daily_data['records'])
+        "file_path": str(log_file),
+        "total_records_today": len(daily_data['records'])
     }
 
 
@@ -93,7 +94,7 @@ def _save_daily_log(log_file: Path, data: Dict) -> None:
     """
     try:
         with open(log_file, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+            json.dump(data, f, indent=4, ensure_ascii=False)
     except IOError as e:
         raise IOError(f"Không thể ghi file log: {str(e)}")
 
@@ -284,6 +285,64 @@ def export_logs_to_csv(start_date: str, end_date: str, output_file: str = None) 
         return str(output_path)
     else:
         raise ValueError("Không có dữ liệu log trong khoảng thời gian đã chọn")
+
+
+def export_today_report(fmt="both"):
+    """
+    Xuất báo cáo hôm nay ra CSV và/hoặc PDF
+    
+    Args:
+        fmt: Định dạng xuất ("csv", "pdf", "both")
+        
+    Returns:
+        Chuỗi thông báo kết quả
+    """
+    report_dir = get_config("REPORT_DIR", "reports")
+    today = datetime.now().strftime("%Y-%m-%d")
+    json_file = f"{report_dir}/{today}.json"
+
+    if not os.path.exists(json_file):
+        return f"Không tìm thấy log ngày {today}."
+
+    with open(json_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    df = pd.DataFrame(data["records"])
+    output_text = []
+
+    if fmt in ["csv", "both"]:
+        csv_path = f"{report_dir}/{today}_report.csv"
+        df.to_csv(csv_path, index=False, encoding="utf-8-sig")
+        output_text.append(f"📄 Đã xuất CSV: {csv_path}")
+
+    if fmt in ["pdf", "both"]:
+        try:
+            from fpdf import FPDF
+
+            pdf_path = f"{report_dir}/{today}_report.pdf"
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial", "B", 14)
+            pdf.cell(0, 10, f"BÁO CÁO PHÂN TÍCH CỔ PHIẾU {today}", ln=True, align="C")
+
+            pdf.set_font("Arial", size=11)
+            for record in data["records"]:
+                pdf.multi_cell(0, 8, f"""
+Mã: {record['symbol']}
+Giá hiện tại: {record['latest_price']}
+Xu hướng: {record['trend']}
+Tín hiệu: {record['signal']}
+Lý do: {record['reason']}
+AI: {record['ai_advice']}
+-------------------------------
+""")
+
+            pdf.output(pdf_path)
+            output_text.append(f"📘 Đã xuất PDF: {pdf_path}")
+        except ImportError:
+            output_text.append("❌ Không thể xuất PDF: thiếu thư viện fpdf")
+
+    return "\n".join(output_text)
 
 
 # Import cần thiết cho các hàm
