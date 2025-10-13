@@ -1,0 +1,215 @@
+{
+  "date": "2025-10-13",
+  "records": [
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Sideways",
+      "signal": "HOLD",
+      "reason": "Lỗi dự đoán: Input X contains NaN.\nLinearRegression does not accept missing values encoded as NaN natively. For supervised learning, you might want to consider sklearn.ensemble.HistGradientBoostingClassifier and Regressor which accept missing values encoded as NaNs natively. Alternatively, it is possible to preprocess the data, for instance by using an imputer transformer in a pipeline or drop samples with missing values. See https://scikit-learn.org/stable/modules/impute.html You can find a list of all estimators that handle NaN values at the following page: https://scikit-learn.org/stable/modules/impute.html#estimators-that-handle-nan-values",
+      "ai_advice": "AI khuyến nghị giữ nguyên vị thế FPT hiện tại. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:07:58",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 155.34,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "symbol": "VNM",
+      "latest_price": 108.8,
+      "trend": "Sideways",
+      "signal": "HOLD",
+      "reason": "Lỗi dự đoán: Input X contains NaN.\nLinearRegression does not accept missing values encoded as NaN natively. For supervised learning, you might want to consider sklearn.ensemble.HistGradientBoostingClassifier and Regressor which accept missing values encoded as NaNs natively. Alternatively, it is possible to preprocess the data, for instance by using an imputer transformer in a pipeline or drop samples with missing values. See https://scikit-learn.org/stable/modules/impute.html You can find a list of all estimators that handle NaN values at the following page: https://scikit-learn.org/stable/modules/impute.html#estimators-that-handle-nan-values",
+      "ai_advice": "AI khuyến nghị giữ nguyên vị thế VNM hiện tại. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:07:58",
+      "technical_indicators": {
+        "SMA7": 106.8,
+        "SMA30": 99.13,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "AI khuyến nghị giữ nguyên vị thế FPT hiện tại. RSI quá mua, chờ điều chỉnh. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:08:23",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 155.34,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        165.65,
+        166.37,
+        167.08,
+        167.8,
+        168.51
+      ]
+    },
+    {
+      "symbol": "VNM",
+      "latest_price": 108.8,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "Phân tích cho thấy VNM đang trong giai đoạn chờ đợi. RSI quá mua, chờ điều chỉnh. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:08:23",
+      "technical_indicators": {
+        "SMA7": 106.8,
+        "SMA30": 99.13,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        109.46,
+        110.14,
+        110.81,
+        111.48,
+        112.16
+      ]
+    },
+    {
+      "symbol": "VNM",
+      "latest_price": 108.8,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "Phân tích cho thấy VNM đang trong giai đoạn chờ đợi. RSI quá mua, chờ điều chỉnh. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:22:44",
+      "technical_indicators": {
+        "SMA7": 106.8,
+        "SMA30": 99.13,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        109.46,
+        110.14,
+        110.81,
+        111.48,
+        112.16
+      ]
+    },
+    {
+      "symbol": "VNM",
+      "latest_price": 108.8,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "Phân tích cho thấy VNM đang trong giai đoạn chờ đợi. RSI quá mua, chờ điều chỉnh. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:23:02",
+      "technical_indicators": {
+        "SMA7": 106.8,
+        "SMA30": 99.13,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        109.46,
+        110.14,
+        110.81,
+        111.48,
+        112.16
+      ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "AI khuyến nghị giữ nguyên vị thế FPT hiện tại. RSI quá mua, chờ điều chỉnh. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:26:27",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 155.34,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        165.65,
+        166.37,
+        167.08,
+        167.8,
+        168.51
+      ]
+    },
+    {
+      "symbol": "VNM",
+      "latest_price": 108.8,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "Phân tích cho thấy VNM đang trong giai đoạn chờ đợi. RSI quá mua, chờ điều chỉnh. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:26:27",
+      "technical_indicators": {
+        "SMA7": 106.8,
+        "SMA30": 99.13,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        109.46,
+        110.14,
+        110.81,
+        111.48,
+        112.16
+      ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "Phân tích cho thấy FPT đang trong giai đoạn chờ đợi. RSI quá mua, chờ điều chỉnh. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:27:43",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 155.34,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        165.65,
+        166.37,
+        167.08,
+        167.8,
+        168.51
+      ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "Tín hiệu chưa rõ ràng cho FPT, nên quan sát thêm. RSI quá mua, chờ điều chỉnh. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T14:27:52",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 155.34,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        165.65,
+        166.37,
+        167.08,
+        167.8,
+        168.51
+      ]
+    }
+  ]
+}
