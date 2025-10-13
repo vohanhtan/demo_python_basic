@@ -19,6 +19,14 @@
 pip install -r requirements.txt
 ```
 
+**Các thư viện chính:**
+- **pandas>=2.0.0**: Xử lý dữ liệu CSV và DataFrame
+- **numpy>=1.24.0**: Tính toán số học và mảng
+- **scikit-learn>=1.3.0**: Machine learning (Linear Regression)
+- **matplotlib>=3.7.0**: Vẽ biểu đồ
+- **streamlit>=1.28.0**: Web framework cho UI
+- **python-dateutil>=2.8.2**: Xử lý ngày tháng
+
 ### 2. Chạy ứng dụng
 
 ```bash
