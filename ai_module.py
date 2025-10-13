@@ -6,6 +6,14 @@ Sau này sẽ thay thế bằng API thật (OpenAI/Gemini/Claude)
 
 import random
 from typing import Dict
+from utils import get_config
+
+# Flag để bật/tắt AI thật - đọc từ .env
+USE_REAL_AI = get_config("USE_REAL_AI", "False").lower() == "true"
+
+# Cảnh báo nếu AI thật được bật
+if USE_REAL_AI:
+    print("⚙️ Chế độ AI thật đang bật, nhưng chưa có API thực tế. Đang fallback sang giả lập.")
 
 
 def get_ai_advice(result_json: Dict) -> str:
@@ -23,6 +31,11 @@ def get_ai_advice(result_json: Dict) -> str:
     Returns:
         Chuỗi lời khuyên AI bằng tiếng Việt
     """
+    # Kiểm tra flag để sử dụng AI thật hay giả lập
+    if USE_REAL_AI:
+        return call_real_ai_api(result_json)
+    
+    # Logic giả lập (như cũ)
     symbol = result_json.get('symbol', 'cổ phiếu')
     trend = result_json.get('trend', 'Sideways')
     signal = result_json.get('signal', 'HOLD')
@@ -278,17 +291,16 @@ def get_market_sentiment(symbol: str, result_json: Dict) -> str:
         return "Neutral"
 
 
-# Hàm dự phòng cho tương lai khi tích hợp API thật
-def call_real_ai_api(result_json: Dict) -> str:
+def call_real_ai_api(json_data: dict) -> str:
     """
-    Hàm dự phòng để gọi API AI thật (chưa implement)
+    Sau này dùng để gọi API OpenAI / Gemini
     
     Args:
-        result_json: Kết quả phân tích
+        json_data: Kết quả phân tích
         
     Returns:
         Lời khuyên từ AI thật
     """
     # TODO: Implement khi có API thật
     # Ví dụ: OpenAI, Gemini, Claude, etc.
-    return "API AI thật chưa được tích hợp. Sử dụng logic giả lập."
+    return "Chế độ AI thật chưa kích hoạt trong phiên bản này."

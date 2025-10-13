@@ -6,11 +6,30 @@ Chứa các hàm hỗ trợ: chuẩn hóa ngày, validate input, format số, et
 from datetime import datetime, timedelta
 from typing import Optional, Tuple
 import re
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+
+def get_config(key: str, default=None):
+    """
+    Đọc biến môi trường từ .env, nếu không có thì trả giá trị mặc định
+    
+    Args:
+        key: Tên biến môi trường
+        default: Giá trị mặc định nếu không tìm thấy
+        
+    Returns:
+        Giá trị biến môi trường hoặc giá trị mặc định
+    """
+    return os.getenv(key, default)
 
 
 def normalize_symbol(symbol: str) -> str:
     """
-    Chuẩn hóa mã cổ phiếu về dạng in hoa
+    Chuẩn hóa mã cổ phiếu về dạng in hoa, xóa khoảng trắng
     
     Args:
         symbol: Mã cổ phiếu cần chuẩn hóa
@@ -18,7 +37,7 @@ def normalize_symbol(symbol: str) -> str:
     Returns:
         Mã cổ phiếu đã chuẩn hóa (in hoa)
     """
-    return symbol.upper().strip()
+    return symbol.strip().upper()
 
 
 def parse_date(date_str: str) -> datetime:
@@ -179,3 +198,30 @@ def truncate_json_for_display(data: dict, max_length: int = 1000) -> str:
     # Rút gọn bằng cách cắt bớt
     truncated = json_str[:max_length] + "\n... (đã rút gọn)"
     return truncated
+
+
+def format_number(n):
+    """
+    Format số với dấu phẩy ngăn cách hàng nghìn
+    
+    Args:
+        n: Số cần format
+        
+    Returns:
+        Chuỗi số đã format
+    """
+    return f"{n:,.2f}".replace(",", ".")
+
+
+def is_data_short(df, min_rows=30):
+    """
+    Kiểm tra xem dữ liệu có ngắn không
+    
+    Args:
+        df: DataFrame cần kiểm tra
+        min_rows: Số hàng tối thiểu (mặc định 30)
+        
+    Returns:
+        True nếu dữ liệu ngắn
+    """
+    return len(df) < min_rows

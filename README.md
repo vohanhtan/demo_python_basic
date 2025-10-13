@@ -9,6 +9,8 @@
 - **AI Advice**: Lời khuyên giả lập thông minh (chuẩn bị cho API thật)
 - **Biểu đồ trực quan**: matplotlib với xử lý lỗi tốt, không crash
 - **Logging**: Ghi kết quả JSON theo ngày với cấu trúc chuẩn
+- **Export báo cáo**: Xuất CSV và PDF từ log hằng ngày
+- **Config .env**: Cấu hình AI và export format dễ dàng
 - **UI thân thiện**: Streamlit với giao diện tiếng Việt, xử lý lỗi tốt
 
 ## 🚀 Cài đặt và chạy
@@ -19,6 +21,16 @@
 pip install -r requirements.txt
 ```
 
+### 2. Tạo file .env
+
+```bash
+# Tạo file .env từ template
+cp env_template.txt .env
+
+# Hoặc chạy script
+python3 create_env.py
+```
+
 **Các thư viện chính:**
 - **pandas>=2.0.0**: Xử lý dữ liệu CSV và DataFrame
 - **numpy>=1.24.0**: Tính toán số học và mảng
@@ -26,16 +38,38 @@ pip install -r requirements.txt
 - **matplotlib>=3.7.0**: Vẽ biểu đồ
 - **streamlit>=1.28.0**: Web framework cho UI
 - **python-dateutil>=2.8.2**: Xử lý ngày tháng
+- **python-dotenv>=1.0.0**: Đọc file .env
+- **fpdf>=1.7.2**: Tạo file PDF
 
-### 2. Chạy ứng dụng
+### 3. Chạy ứng dụng
 
 ```bash
 streamlit run app.py
 ```
 
-### 3. Truy cập
+### 4. Truy cập
 
 Mở trình duyệt và truy cập: `http://localhost:8501`
+
+## ⚙️ Cấu hình .env
+
+File `.env` cho phép cấu hình các tùy chọn:
+
+```env
+# Chế độ AI
+USE_REAL_AI=False
+
+# Định dạng export log (csv, pdf, both)
+EXPORT_FORMAT=both
+
+# Thư mục lưu log
+REPORT_DIR=reports
+```
+
+### Các tùy chọn:
+- **USE_REAL_AI**: `True` để bật AI thật (chưa implement)
+- **EXPORT_FORMAT**: `csv`, `pdf`, hoặc `both`
+- **REPORT_DIR**: Thư mục lưu file log (mặc định: `reports`)
 
 ## 📁 Cấu trúc dự án
 
@@ -51,6 +85,8 @@ demo_python_basic/
 ├── utils.py               # Hàm tiện ích
 ├── requirements.txt       # Dependencies
 ├── README.md              # Hướng dẫn chi tiết
+├── env_template.txt       # Template file .env
+├── create_env.py          # Script tạo file .env
 ├── data/                  # Dữ liệu CSV
 │   ├── FPT.csv
 │   └── VNM.csv
@@ -146,7 +182,8 @@ Date,Symbol,Open,High,Low,Close,Volume
 3. **Số ngày dự đoán**: 1-10 ngày (mặc định 5 ngày)
 4. **Nhấn "Phân tích"**: Xem kết quả chi tiết
 5. **Xem biểu đồ**: Chọn "Biểu đồ giá" hoặc "Biểu đồ tổng hợp"
-6. **Tải kết quả**: JSON được lưu tự động và có thể tải xuống
+6. **Xuất báo cáo**: Tab "📤 Xuất báo cáo" để tạo CSV/PDF
+7. **Tải kết quả**: JSON được lưu tự động và có thể tải xuống
 
 ## 📈 Kết quả phân tích
 
@@ -216,6 +253,8 @@ Kết quả phân tích được ghi vào `reports/YYYY-MM-DD.json`:
 - **Dữ liệu mẫu**: CSV được tạo giả lập cho demo (~90 ngày)
 - **Xử lý lỗi tốt**: Ứng dụng không crash, có fallback thông minh
 - **Dự đoán ổn định**: Linear Regression + fallback dựa trên xu hướng thực tế
+- **Export báo cáo**: CSV và PDF từ log hằng ngày
+- **Config linh hoạt**: .env file để cấu hình dễ dàng
 
 ## 🔮 Mở rộng tương lai
 
@@ -225,6 +264,8 @@ Kết quả phân tích được ghi vào `reports/YYYY-MM-DD.json`:
 - [ ] Thêm machine learning models (LSTM, Prophet)
 - [ ] Portfolio analysis
 - [ ] Alert system
+- [ ] Export Excel format
+- [ ] Email báo cáo tự động
 
 ## 🐛 Troubleshooting
 
@@ -255,6 +296,11 @@ pip install --upgrade matplotlib
 - Nếu Linear Regression lỗi, sẽ dùng xu hướng đơn giản
 - Giá dự đoán luôn dựa trên giá thực tế, không phải giá mặc định
 
+### Lỗi export
+- Đảm bảo đã cài đặt `fpdf>=1.7.2`
+- File .env phải tồn tại và có cấu hình đúng
+- Thư mục reports/ phải có quyền ghi
+
 ## 📞 Hỗ trợ
 
 Nếu gặp vấn đề, vui lòng kiểm tra:
@@ -280,3 +326,6 @@ Nếu gặp vấn đề, vui lòng kiểm tra:
 - ✅ Giá dự đoán hiển thị giá thực tế (không còn 0 hoặc 100)
 - ✅ Xử lý lỗi tốt, không crash
 - ✅ Fallback thông minh cho tất cả chức năng
+- ✅ Export CSV và PDF từ log hằng ngày
+- ✅ Config .env linh hoạt
+- ✅ UI chuyên nghiệp với màu sắc và emoji
