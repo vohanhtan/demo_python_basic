@@ -367,6 +367,27 @@
         121.67,
         125.74
       ]
+    },
+    {
+      "symbol": "FPT",
+      "latest_price": 165.0,
+      "trend": "Uptrend",
+      "signal": "HOLD",
+      "reason": "Xu hướng tăng nhưng RSI đã quá mua",
+      "ai_advice": "AI khuyến nghị giữ nguyên vị thế FPT hiện tại. RSI quá mua, chờ điều chỉnh. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+      "generated_at": "2025-10-13T15:31:15",
+      "technical_indicators": {
+        "SMA7": 163.01,
+        "SMA30": 155.34,
+        "RSI14": 100.0
+      },
+      "forecast_next_days": [
+        165.65,
+        166.37,
+        167.08,
+        167.8,
+        168.51
+      ]
     }
   ]
 }

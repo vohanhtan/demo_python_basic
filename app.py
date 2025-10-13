@@ -86,7 +86,7 @@ def main():
         analyze_button = st.button(
             "🚀 Phân tích",
             type="primary",
-            use_container_width=True
+            width='stretch'
         )
         
         # Hiển thị thông tin dữ liệu
@@ -328,7 +328,7 @@ def _show_overview(result_json: dict, df: pd.DataFrame):
             'Ngày': [f"T+{i+1}" for i in range(len(forecast_days))],
             'Giá dự đoán (VND)': [f"{price:,.0f}" for price in forecast_days]
         })
-        st.dataframe(forecast_df, use_container_width=True)
+        st.dataframe(forecast_df, width='stretch')
     
     # Lý do tín hiệu
     st.subheader("💡 Lý do tín hiệu")

@@ -50,6 +50,75 @@ demo_python_basic/
     └── YYYY-MM-DD.json
 ```
 
+## 📊 Chỉ báo kỹ thuật
+
+### SMA (Simple Moving Average) - Đường trung bình động đơn giản
+
+#### SMA(7) - Đường trung bình 7 ngày
+- **Là gì**: Giá trị trung bình của giá đóng cửa trong 7 ngày gần nhất
+- **Ý nghĩa**: Phản ánh xu hướng ngắn hạn, nhạy cảm với biến động giá
+- **Tại sao sử dụng**: 
+  - Xác định xu hướng ngắn hạn (1-2 tuần)
+  - Tín hiệu mua/bán nhanh
+  - Lọc nhiễu giá ngắn hạn
+- **Cách tính**: `SMA(7) = (P1 + P2 + ... + P7) / 7`
+- **Tại sao 7 ngày**: Tương ứng với 1 tuần giao dịch, phù hợp cho phân tích ngắn hạn
+
+#### SMA(30) - Đường trung bình 30 ngày  
+- **Là gì**: Giá trị trung bình của giá đóng cửa trong 30 ngày gần nhất
+- **Ý nghĩa**: Phản ánh xu hướng trung hạn, ổn định hơn SMA(7)
+- **Tại sao sử dụng**:
+  - Xác định xu hướng chính (1-2 tháng)
+  - Tín hiệu mua/bán đáng tin cậy hơn
+  - Hỗ trợ/kháng cự động
+- **Cách tính**: `SMA(30) = (P1 + P2 + ... + P30) / 30`
+- **Tại sao 30 ngày**: Tương ứng với 1 tháng giao dịch, phù hợp cho phân tích trung hạn
+
+#### Quy tắc giao dịch SMA:
+- **Tín hiệu MUA**: SMA(7) cắt lên trên SMA(30) (Golden Cross)
+- **Tín hiệu BÁN**: SMA(7) cắt xuống dưới SMA(30) (Death Cross)
+- **Xu hướng TĂNG**: Giá > SMA(7) > SMA(30)
+- **Xu hướng GIẢM**: Giá < SMA(7) < SMA(30)
+
+### RSI (Relative Strength Index) - Chỉ số sức mạnh tương đối
+
+#### RSI(14) - Chỉ số RSI 14 ngày
+- **Là gì**: Chỉ báo momentum đo lường tốc độ và độ lớn của biến động giá
+- **Ý nghĩa**: Xác định trạng thái quá mua/quá bán của cổ phiếu
+- **Tại sao sử dụng**:
+  - Phát hiện điểm đảo chiều tiềm năng
+  - Xác nhận tín hiệu từ SMA
+  - Quản lý rủi ro (tránh mua đỉnh, bán đáy)
+- **Cách tính**:
+  ```
+  RSI = 100 - (100 / (1 + RS))
+  RS = Average Gain / Average Loss
+  Average Gain = Trung bình tăng giá trong 14 ngày
+  Average Loss = Trung bình giảm giá trong 14 ngày
+  ```
+- **Tại sao 14 ngày**: 
+  - Đủ dài để lọc nhiễu ngắn hạn
+  - Đủ ngắn để phản ứng kịp thời với thay đổi
+  - Chuẩn công nghiệp được sử dụng rộng rãi
+
+#### Quy tắc giao dịch RSI:
+- **Quá mua (Overbought)**: RSI > 70 → Có thể bán
+- **Quá bán (Oversold)**: RSI < 30 → Có thể mua  
+- **Vùng trung tính**: 30 ≤ RSI ≤ 70 → Chờ tín hiệu
+- **Phân kỳ**: RSI và giá di chuyển ngược chiều → Tín hiệu đảo chiều
+
+### Kết hợp các chỉ báo
+
+#### Chiến lược phân tích:
+1. **Xác định xu hướng**: Dùng SMA(7) và SMA(30)
+2. **Tìm điểm vào**: Dùng RSI để xác định thời điểm
+3. **Quản lý rủi ro**: Kết hợp cả 3 chỉ báo
+
+#### Ví dụ tín hiệu:
+- **MUA**: SMA(7) > SMA(30) + RSI < 70 (chưa quá mua)
+- **BÁN**: SMA(7) < SMA(30) + RSI > 30 (chưa quá bán)
+- **HOLD**: Các chỉ báo mâu thuẫn hoặc không rõ ràng
+
 ## 📊 Dữ liệu mẫu
 
 Dự án đi kèm dữ liệu mẫu cho 2 mã cổ phiếu:
