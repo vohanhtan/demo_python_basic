@@ -1,0 +1,17 @@
+{
+  "symbol": "AAPL",
+  "trend": "Uptrend",
+  "signal": "BUY",
+  "technical_indicators": {
+    "RSI14": 50,
+    "SMA7": 253.74571446010046,
+    "SMA30": 246.0336664835612
+  },
+  "reason": "avg_pred=248.08 vs last=247.66",
+  "forecast_summary": {
+    "mean_pred": 248.07593949238756,
+    "min_pred": 247.5560196619595,
+    "max_pred": 248.59585932281558,
+    "std": 0.2079679321712149
+  }
+}
