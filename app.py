@@ -373,7 +373,7 @@ def _show_overview(result_json: dict, df: pd.DataFrame):
     with col4:
         from ai_module import get_market_sentiment
         sentiment = get_market_sentiment(result_json['symbol'], result_json)
-        sentiment_display = "😊 Tích cực" if sentiment == "Bullish" else "😐 Trung lập" if sentiment == "Neutral" else "😟 Tiêu cực"
+        sentiment_display = "😊 Tích cực" if sentiment == "Tích cực" else "😐 Trung lập" if sentiment == "Trung lập" else "😟 Tiêu cực"
         st.metric("🧠 Sentiment", sentiment_display, delta=None)
     
     # Chỉ báo kỹ thuật
@@ -472,7 +472,7 @@ def _show_ai_advice(result_json: dict):
     with col2:
         from ai_module import get_market_sentiment
         sentiment = get_market_sentiment(result_json['symbol'], result_json)
-        sentiment_emoji = {"Bullish": "🐂", "Bearish": "🐻", "Neutral": "😐"}
+        sentiment_emoji = {"Tích cực": "🐂", "Tiêu cực": "🐻", "Trung lập": "😐"}
         st.metric(
             "Tâm lý thị trường",
             f"{sentiment_emoji.get(sentiment, '😐')} {sentiment}"
