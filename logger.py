@@ -287,6 +287,142 @@ def export_logs_to_csv(start_date: str, end_date: str, output_file: str = None) 
         raise ValueError("Không có dữ liệu log trong khoảng thời gian đã chọn")
 
 
+def _add_summary_chart_to_pdf(pdf, records):
+    """Thêm biểu đồ tổng quan vào PDF"""
+    try:
+        import matplotlib.pyplot as plt
+        import matplotlib
+        matplotlib.use('Agg')
+        from io import BytesIO
+        import tempfile
+        import os
+        
+        # Tạo biểu đồ phân bố tín hiệu
+        signals = [r.get('signal', 'HOLD') for r in records]
+        signal_counts = {'BUY': signals.count('BUY'), 'SELL': signals.count('SELL'), 'HOLD': signals.count('HOLD')}
+        
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        
+        # Biểu đồ tín hiệu
+        ax1.pie(signal_counts.values(), labels=signal_counts.keys(), autopct='%1.1f%%', startangle=90)
+        ax1.set_title('Phan bo tin hieu')
+        
+        # Biểu đồ giá
+        symbols = [r.get('symbol', '') for r in records]
+        prices = [r.get('latest_price', 0) for r in records]
+        ax2.bar(symbols, prices)
+        ax2.set_title('Gia hien tai cac ma')
+        ax2.set_ylabel('Gia (VND)')
+        plt.xticks(rotation=45)
+        
+        plt.tight_layout()
+        
+        # Lưu biểu đồ vào file tạm
+        with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as tmp_file:
+            plt.savefig(tmp_file.name, dpi=150, bbox_inches='tight')
+            tmp_path = tmp_file.name
+        
+        # Thêm vào PDF
+        pdf.ln(5)
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(0, 8, "BIEU DO TONG QUAN", ln=True, align="C")
+        pdf.image(tmp_path, x=20, w=170)
+        
+        # Xóa file tạm
+        os.unlink(tmp_path)
+        plt.close()
+        
+    except Exception as e:
+        print(f"Lỗi tạo biểu đồ tổng quan: {e}")
+
+
+def _add_stock_chart_to_pdf(pdf, symbol, record):
+    """Thêm biểu đồ cho từng mã cổ phiếu vào PDF"""
+    try:
+        import matplotlib.pyplot as plt
+        import matplotlib
+        matplotlib.use('Agg')
+        import tempfile
+        import os
+        from data_service import get_stock_data
+        from indicators import add_indicators
+        from datetime import datetime, timedelta
+        
+        # Lấy dữ liệu 30 ngày gần nhất
+        end_date = datetime.now().strftime('%Y-%m-%d')
+        start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+        
+        df = get_stock_data(symbol, start_date, end_date)
+        if df.empty or len(df) < 5:
+            return
+            
+        df_with_indicators = add_indicators(df)
+        
+        # Tạo biểu đồ
+        fig, ax = plt.subplots(figsize=(10, 6))
+        
+        # Vẽ giá Close và SMA
+        ax.plot(df_with_indicators.index, df_with_indicators['Close'], label='Gia Close', linewidth=2)
+        if 'SMA7' in df_with_indicators.columns:
+            ax.plot(df_with_indicators.index, df_with_indicators['SMA7'], label='SMA7', alpha=0.7)
+        if 'SMA30' in df_with_indicators.columns:
+            ax.plot(df_with_indicators.index, df_with_indicators['SMA30'], label='SMA30', alpha=0.7)
+        
+        ax.set_title(f'Bieu do gia {symbol}')
+        ax.set_ylabel('Gia (VND)')
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        
+        # Lưu biểu đồ vào file tạm
+        with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as tmp_file:
+            plt.savefig(tmp_file.name, dpi=150, bbox_inches='tight')
+            tmp_path = tmp_file.name
+        
+        # Thêm vào PDF
+        pdf.ln(5)
+        pdf.image(tmp_path, x=20, w=170)
+        
+        # Xóa file tạm
+        os.unlink(tmp_path)
+        plt.close()
+        
+    except Exception as e:
+        print(f"Lỗi tạo biểu đồ cho {symbol}: {e}")
+
+
+def _get_latest_records_by_symbol(records):
+    """
+    Lấy bản ghi mới nhất cho mỗi mã cổ phiếu
+    
+    Args:
+        records: Danh sách tất cả bản ghi
+        
+    Returns:
+        Danh sách bản ghi mới nhất cho mỗi mã
+    """
+    symbol_records = {}
+    
+    for record in records:
+        symbol = record.get('symbol', '')
+        if not symbol:
+            continue
+            
+        # Nếu chưa có hoặc bản ghi này mới hơn
+        if symbol not in symbol_records:
+            symbol_records[symbol] = record
+        else:
+            # So sánh thời gian generated_at
+            current_time = record.get('generated_at', '')
+            existing_time = symbol_records[symbol].get('generated_at', '')
+            
+            if current_time > existing_time:
+                symbol_records[symbol] = record
+    
+    return list(symbol_records.values())
+
+
 def export_today_report(fmt="both"):
     """
     Xuất báo cáo hôm nay ra CSV và/hoặc PDF
@@ -298,6 +434,11 @@ def export_today_report(fmt="both"):
         Chuỗi thông báo kết quả
     """
     report_dir = get_config("REPORT_DIR", "reports")
+    export_dir = get_config("EXPORT_DIR", "export")
+    
+    # Tạo thư mục export nếu chưa có
+    os.makedirs(export_dir, exist_ok=True)
+    
     today = datetime.now().strftime("%Y-%m-%d")
     json_file = f"{report_dir}/{today}.json"
 
@@ -307,40 +448,129 @@ def export_today_report(fmt="both"):
     with open(json_file, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    df = pd.DataFrame(data["records"])
+    records = data.get("records", [])
+    if not records:
+        return f"Không có bản ghi nào trong ngày {today}."
+
+    # Lấy bản ghi mới nhất cho mỗi mã cổ phiếu
+    latest_records = _get_latest_records_by_symbol(records)
+    df = pd.DataFrame(latest_records)
+    
     output_text = []
 
     if fmt in ["csv", "both"]:
-        csv_path = f"{report_dir}/{today}_report.csv"
+        csv_path = f"{export_dir}/{today}_report.csv"
         df.to_csv(csv_path, index=False, encoding="utf-8-sig")
         output_text.append(f"📄 Đã xuất CSV: {csv_path}")
 
     if fmt in ["pdf", "both"]:
         try:
             from fpdf import FPDF
+            import matplotlib.pyplot as plt
+            import matplotlib
+            matplotlib.use('Agg')  # Use non-interactive backend
+            from io import BytesIO
+            import base64
 
-            pdf_path = f"{report_dir}/{today}_report.pdf"
+            pdf_path = f"{export_dir}/{today}_report.pdf"
             pdf = FPDF()
             pdf.add_page()
             pdf.set_font("Arial", "B", 14)
-            pdf.cell(0, 10, f"BÁO CÁO PHÂN TÍCH CỔ PHIẾU {today}", ln=True, align="C")
+            pdf.cell(0, 10, f"BAO CAO PHAN TICH CO PHIEU {today}", ln=True, align="C")
 
             pdf.set_font("Arial", size=11)
-            for record in data["records"]:
-                pdf.multi_cell(0, 8, f"""
-Mã: {record['symbol']}
-Giá hiện tại: {record['latest_price']}
-Xu hướng: {record['trend']}
-Tín hiệu: {record['signal']}
-Lý do: {record['reason']}
-AI: {record['ai_advice']}
--------------------------------
-""")
+            
+            # Thống kê tổng quan
+            pdf.cell(0, 8, f"Tong so ma co phieu: {len(latest_records)}", ln=True)
+            pdf.cell(0, 8, f"Ngay tao bao cao: {today}", ln=True)
+            pdf.ln(5)
+            
+            # Chuyển đổi các ký tự tiếng Việt thành ASCII
+            def to_ascii(text):
+                if not text:
+                    return ""
+                replacements = {
+                    'á': 'a', 'à': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
+                    'ă': 'a', 'ắ': 'a', 'ằ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
+                    'â': 'a', 'ấ': 'a', 'ầ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a',
+                    'é': 'e', 'è': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ẹ': 'e',
+                    'ê': 'e', 'ế': 'e', 'ề': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e',
+                    'í': 'i', 'ì': 'i', 'ỉ': 'i', 'ĩ': 'i', 'ị': 'i',
+                    'ó': 'o', 'ò': 'o', 'ỏ': 'o', 'õ': 'o', 'ọ': 'o',
+                    'ô': 'o', 'ố': 'o', 'ồ': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o',
+                    'ơ': 'o', 'ớ': 'o', 'ờ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o',
+                    'ú': 'u', 'ù': 'u', 'ủ': 'u', 'ũ': 'u', 'ụ': 'u',
+                    'ư': 'u', 'ứ': 'u', 'ừ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u',
+                    'ý': 'y', 'ỳ': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y',
+                    'đ': 'd',
+                    'Á': 'A', 'À': 'A', 'Ả': 'A', 'Ã': 'A', 'Ạ': 'A',
+                    'Ă': 'A', 'Ắ': 'A', 'Ằ': 'A', 'Ẳ': 'A', 'Ẵ': 'A', 'Ặ': 'A',
+                    'Â': 'A', 'Ấ': 'A', 'Ầ': 'A', 'Ẩ': 'A', 'Ẫ': 'A', 'Ậ': 'A',
+                    'É': 'E', 'È': 'E', 'Ẻ': 'E', 'Ẽ': 'E', 'Ẹ': 'E',
+                    'Ê': 'E', 'Ế': 'E', 'Ề': 'E', 'Ể': 'E', 'Ễ': 'E', 'Ệ': 'E',
+                    'Í': 'I', 'Ì': 'I', 'Ỉ': 'I', 'Ĩ': 'I', 'Ị': 'I',
+                    'Ó': 'O', 'Ò': 'O', 'Ỏ': 'O', 'Õ': 'O', 'Ọ': 'O',
+                    'Ô': 'O', 'Ố': 'O', 'Ồ': 'O', 'Ổ': 'O', 'Ỗ': 'O', 'Ộ': 'O',
+                    'Ơ': 'O', 'Ớ': 'O', 'Ờ': 'O', 'Ở': 'O', 'Ỡ': 'O', 'Ợ': 'O',
+                    'Ú': 'U', 'Ù': 'U', 'Ủ': 'U', 'Ũ': 'U', 'Ụ': 'U',
+                    'Ư': 'U', 'Ứ': 'U', 'Ừ': 'U', 'Ử': 'U', 'Ữ': 'U', 'Ự': 'U',
+                    'Ý': 'Y', 'Ỳ': 'Y', 'Ỷ': 'Y', 'Ỹ': 'Y', 'Ỵ': 'Y',
+                    'Đ': 'D'
+                }
+                result = text
+                for viet, ascii in replacements.items():
+                    result = result.replace(viet, ascii)
+                return result
+            
+            # Tạo biểu đồ tổng quan (chỉ khi có đủ số lượng mã)
+            min_symbols_for_chart = int(get_config("MIN_SYMBOLS_FOR_CHART", "2"))
+            if len(latest_records) >= min_symbols_for_chart:
+                _add_summary_chart_to_pdf(pdf, latest_records)
+            else:
+                pdf.ln(5)
+                pdf.set_font("Arial", "I", 10)
+                pdf.cell(0, 8, f"Khong ve bieu do tong quan (can it nhat {min_symbols_for_chart} ma, hien co {len(latest_records)} ma)", ln=True, align="C")
+            
+            # Chi tiết từng mã cổ phiếu
+            for i, record in enumerate(latest_records, 1):
+                symbol = record.get('symbol', '')
+                price = record.get('latest_price', '')
+                trend = record.get('trend', '')
+                signal = record.get('signal', '')
+                reason = record.get('reason', '')
+                ai_advice = record.get('ai_advice', '')
+                generated_at = record.get('generated_at', '')
+                
+                # Tiêu đề cho mỗi mã
+                pdf.set_font("Arial", "B", 12)
+                pdf.cell(0, 8, f"[{i}] MA CO PHIEU: {to_ascii(symbol)}", ln=True)
+                
+                # Chi tiết
+                pdf.set_font("Arial", size=10)
+                text = f"""
+Gia hien tai: {price:,} VND
+Xu huong: {to_ascii(trend)}
+Tin hieu: {to_ascii(signal)}
+Ly do: {to_ascii(reason)}
+AI tu van: {to_ascii(ai_advice)}
+Thoi gian phan tich: {generated_at}
+"""
+                pdf.multi_cell(0, 6, text)
+                pdf.ln(3)
+                
+                # Thêm biểu đồ cho mã này nếu có dữ liệu
+                _add_stock_chart_to_pdf(pdf, symbol, record)
+                
+                # Ngắt trang nếu cần
+                if i % 2 == 0 and i < len(latest_records):
+                    pdf.add_page()
 
             pdf.output(pdf_path)
             output_text.append(f"📘 Đã xuất PDF: {pdf_path}")
         except ImportError:
             output_text.append("❌ Không thể xuất PDF: thiếu thư viện fpdf")
+        except Exception as e:
+            output_text.append(f"❌ Lỗi tạo PDF: {str(e)}")
 
     return "\n".join(output_text)
 

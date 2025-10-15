@@ -7,10 +7,13 @@
 - **Phân tích kỹ thuật**: SMA(7), SMA(30), RSI(14) với tính toán chính xác
 - **Dự đoán ngắn hạn**: Linear Regression + fallback thông minh cho 3-10 ngày
 - **AI Advice**: Lời khuyên giả lập thông minh (chuẩn bị cho API thật)
-- **Biểu đồ trực quan**: matplotlib với xử lý lỗi tốt, không crash
+- **Biểu đồ đa dạng**: 
+  - 📊 Biểu đồ giá (Line chart với MA)
+  - 🕯️ Biểu đồ Candlestick (OHLC + Volume)
+  - 📈 Biểu đồ tổng hợp (RSI + Volume)
 - **Logging**: Ghi kết quả JSON theo ngày với cấu trúc chuẩn
-- **Export báo cáo**: Xuất CSV và PDF từ log hằng ngày
-- **Config .env**: Cấu hình AI và export format dễ dàng
+- **Export báo cáo**: Xuất CSV và PDF từ log hằng ngày với biểu đồ
+- **Config .env**: Cấu hình AI, export format và ngưỡng biểu đồ
 - **UI thân thiện**: Streamlit với giao diện tiếng Việt, xử lý lỗi tốt
 
 ## 🚀 Cài đặt và chạy
@@ -35,11 +38,12 @@ python3 create_env.py
 - **pandas>=2.0.0**: Xử lý dữ liệu CSV và DataFrame
 - **numpy>=1.24.0**: Tính toán số học và mảng
 - **scikit-learn>=1.3.0**: Machine learning (Linear Regression)
-- **matplotlib>=3.7.0**: Vẽ biểu đồ
+- **matplotlib>=3.7.0**: Vẽ biểu đồ cơ bản
+- **mplfinance>=0.12.10**: Biểu đồ Candlestick chuyên nghiệp
 - **streamlit>=1.28.0**: Web framework cho UI
 - **python-dateutil>=2.8.2**: Xử lý ngày tháng
 - **python-dotenv>=1.0.0**: Đọc file .env
-- **fpdf>=1.7.2**: Tạo file PDF
+- **fpdf>=1.7.2**: Tạo file PDF với biểu đồ
 
 ### 3. Chạy ứng dụng
 
@@ -56,20 +60,28 @@ Mở trình duyệt và truy cập: `http://localhost:8501`
 File `.env` cho phép cấu hình các tùy chọn:
 
 ```env
-# Chế độ AI
+# Chế độ AI thật (hiện chưa dùng — để False)
 USE_REAL_AI=False
 
-# Định dạng export log (csv, pdf, both)
+# Định dạng export: csv | pdf | both
 EXPORT_FORMAT=both
 
-# Thư mục lưu log
+# Thư mục chứa log
 REPORT_DIR=reports
+
+# Thư mục chứa file export
+EXPORT_DIR=export
+
+# Số lượng mã cổ phiếu tối thiểu để vẽ biểu đồ tổng quan
+MIN_SYMBOLS_FOR_CHART=2
 ```
 
 ### Các tùy chọn:
 - **USE_REAL_AI**: `True` để bật AI thật (chưa implement)
 - **EXPORT_FORMAT**: `csv`, `pdf`, hoặc `both`
 - **REPORT_DIR**: Thư mục lưu file log (mặc định: `reports`)
+- **EXPORT_DIR**: Thư mục xuất file CSV/PDF (mặc định: `export`)
+- **MIN_SYMBOLS_FOR_CHART**: Ngưỡng vẽ biểu đồ tổng quan (mặc định: `2`)
 
 ## 📁 Cấu trúc dự án
 
@@ -80,18 +92,20 @@ demo_python_basic/
 ├── indicators.py          # Tính SMA và RSI
 ├── predictor.py           # Dự đoán bằng Linear Regression
 ├── ai_module.py           # AI advice (giả lập)
-├── logger.py              # Ghi log JSON theo ngày
-├── visualizer.py          # Vẽ biểu đồ matplotlib
-├── utils.py               # Hàm tiện ích
-├── requirements.txt       # Dependencies
+├── logger.py              # Ghi log JSON theo ngày + Export CSV/PDF
+├── visualizer.py          # Vẽ biểu đồ (Line, Candlestick, Combined)
+├── utils.py               # Hàm tiện ích + Config .env
+├── requirements.txt       # Dependencies (bao gồm mplfinance)
 ├── README.md              # Hướng dẫn chi tiết
-├── env_template.txt       # Template file .env
-├── create_env.py          # Script tạo file .env
+├── .env                   # File cấu hình (tự tạo)
 ├── data/                  # Dữ liệu CSV
 │   ├── FPT.csv
 │   └── VNM.csv
-└── reports/               # Log files (tự động tạo)
-    └── YYYY-MM-DD.json
+├── reports/               # Log files (tự động tạo)
+│   └── YYYY-MM-DD.json
+└── export/                # File export CSV/PDF (tự động tạo)
+    ├── YYYY-MM-DD_report.csv
+    └── YYYY-MM-DD_report.pdf
 ```
 
 ## 📊 Chỉ báo kỹ thuật
@@ -181,8 +195,11 @@ Date,Symbol,Open,High,Low,Close,Volume
 2. **Thiết lập khoảng thời gian**: Ngày bắt đầu và kết thúc (mặc định 60 ngày gần nhất)
 3. **Số ngày dự đoán**: 1-10 ngày (mặc định 5 ngày)
 4. **Nhấn "Phân tích"**: Xem kết quả chi tiết
-5. **Xem biểu đồ**: Chọn "Biểu đồ giá" hoặc "Biểu đồ tổng hợp"
-6. **Xuất báo cáo**: Tab "📤 Xuất báo cáo" để tạo CSV/PDF
+5. **Xem biểu đồ**: 3 loại biểu đồ hiển thị theo chiều dọc:
+   - 📊 Biểu đồ giá (Line chart với MA)
+   - 🕯️ Biểu đồ Candlestick (OHLC + Volume)
+   - 📈 Biểu đồ tổng hợp (RSI + Volume)
+6. **Xuất báo cáo**: Nút "📄 Xuất báo cáo hôm nay" để tạo CSV/PDF
 7. **Tải kết quả**: JSON được lưu tự động và có thể tải xuống
 
 ## 📈 Kết quả phân tích
@@ -258,6 +275,10 @@ Kết quả phân tích được ghi vào `reports/YYYY-MM-DD.json`:
 
 ## 🔮 Mở rộng tương lai
 
+- [x] Biểu đồ Candlestick chuyên nghiệp
+- [x] Export PDF với biểu đồ tích hợp
+- [x] Config .env linh hoạt
+- [x] Ngưỡng vẽ biểu đồ tổng quan
 - [ ] Tích hợp API thật (OpenAI, Gemini, Claude)
 - [ ] Thêm nhiều chỉ báo kỹ thuật (MACD, Bollinger Bands)
 - [ ] Kết nối dữ liệu thời gian thực
@@ -266,6 +287,8 @@ Kết quả phân tích được ghi vào `reports/YYYY-MM-DD.json`:
 - [ ] Alert system
 - [ ] Export Excel format
 - [ ] Email báo cáo tự động
+- [ ] Interactive charts với Plotly
+- [ ] Real-time data với yfinance
 
 ## 🐛 Troubleshooting
 
@@ -288,8 +311,13 @@ pip install --upgrade matplotlib
 
 ### Lỗi biểu đồ
 - Ứng dụng có xử lý lỗi tốt, không crash
-- Nếu "Biểu đồ tổng hợp" không hiển thị, thử "Biểu đồ giá"
 - Tất cả lỗi đều có thông báo rõ ràng bằng tiếng Việt
+- 3 loại biểu đồ hiển thị độc lập, lỗi một loại không ảnh hưởng loại khác
+
+### Lỗi Candlestick
+- Đảm bảo đã cài đặt `mplfinance>=0.12.10`
+- Biểu đồ Candlestick cần dữ liệu OHLCV đầy đủ
+- Nếu thiếu dữ liệu, sẽ hiển thị warning và fallback sang biểu đồ khác
 
 ### Lỗi dự đoán
 - Dự đoán có fallback thông minh
@@ -326,6 +354,9 @@ Nếu gặp vấn đề, vui lòng kiểm tra:
 - ✅ Giá dự đoán hiển thị giá thực tế (không còn 0 hoặc 100)
 - ✅ Xử lý lỗi tốt, không crash
 - ✅ Fallback thông minh cho tất cả chức năng
-- ✅ Export CSV và PDF từ log hằng ngày
-- ✅ Config .env linh hoạt
+- ✅ Export CSV và PDF từ log hằng ngày với biểu đồ
+- ✅ Config .env linh hoạt với ngưỡng biểu đồ
 - ✅ UI chuyên nghiệp với màu sắc và emoji
+- ✅ Biểu đồ Candlestick chuyên nghiệp với mplfinance
+- ✅ Layout biểu đồ theo chiều dọc, dễ nhìn hơn
+- ✅ Nút export di chuyển ra sidebar, tránh lỗi callback

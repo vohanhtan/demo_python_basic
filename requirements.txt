@@ -7,6 +7,7 @@ scikit-learn>=1.3.0
 
 # Visualization
 matplotlib>=3.7.0
+mplfinance>=0.12.10
 
 # Web framework
 streamlit>=1.28.0
@@ -24,3 +25,5 @@ fpdf>=1.7.2
 # seaborn>=0.12.0         # Statistical visualization
 # yfinance>=0.2.18        # Real stock data (future use)
 # requests>=2.31.0        # HTTP requests (future API integration)
+# openai>=1.0.0           # OpenAI API (future AI integration)
+# google-generativeai>=0.3.0  # Google Gemini API (future AI integration)

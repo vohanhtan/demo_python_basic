@@ -1,0 +1,2 @@
+﻿symbol,latest_price,trend,signal,reason,ai_advice,generated_at,technical_indicators,forecast_next_days
+FPT,165.8,Sideways,SELL,"Thị trường sideways, RSI quá mua, nên bán","Tín hiệu bán xuất hiện cho FPT, nên xem xét chốt lời. Lý do: RSI quá mua. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Có thể bỏ lỡ cơ hội nếu thị trường đảo chiều.",2025-10-15T09:16:12,"{'SMA7': 163.7, 'SMA30': 156.01, 'RSI14': 100.0}","[166.37, 167.04, 167.72, 168.4, 169.08]"

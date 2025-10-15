@@ -1,0 +1,110 @@
+{
+    "date": "2025-10-15",
+    "records": [
+        {
+            "symbol": "FPT",
+            "latest_price": 165.8,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "Phân tích cho thấy FPT có thể điều chỉnh giảm. Lý do: RSI quá mua. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Có thể bỏ lỡ cơ hội nếu thị trường đảo chiều.",
+            "generated_at": "2025-10-15T09:05:44",
+            "technical_indicators": {
+                "SMA7": 163.7,
+                "SMA30": 156.01,
+                "RSI14": 100.0
+            },
+            "forecast_next_days": [
+                166.37,
+                167.04,
+                167.72,
+                168.4,
+                169.08
+            ]
+        },
+        {
+            "symbol": "FPT",
+            "latest_price": 165.8,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "Phân tích cho thấy FPT có thể điều chỉnh giảm. Lý do: RSI quá mua. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Có thể bỏ lỡ cơ hội nếu thị trường đảo chiều.",
+            "generated_at": "2025-10-15T09:10:24",
+            "technical_indicators": {
+                "SMA7": 163.7,
+                "SMA30": 156.01,
+                "RSI14": 100.0
+            },
+            "forecast_next_days": [
+                166.37,
+                167.04,
+                167.72,
+                168.4,
+                169.08
+            ]
+        },
+        {
+            "symbol": "FPT",
+            "latest_price": 165.8,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "Tín hiệu bán xuất hiện cho FPT, nên xem xét chốt lời. Lý do: RSI quá mua. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Có thể bỏ lỡ cơ hội nếu thị trường đảo chiều.",
+            "generated_at": "2025-10-15T09:16:12",
+            "technical_indicators": {
+                "SMA7": 163.7,
+                "SMA30": 156.01,
+                "RSI14": 100.0
+            },
+            "forecast_next_days": [
+                166.37,
+                167.04,
+                167.72,
+                168.4,
+                169.08
+            ]
+        },
+        {
+            "symbol": "FPT",
+            "latest_price": 165.8,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "AI khuyến nghị thận trọng với FPT trong ngắn hạn. Lý do: RSI quá mua. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Có thể bỏ lỡ cơ hội nếu thị trường đảo chiều.",
+            "generated_at": "2025-10-15T09:17:21",
+            "technical_indicators": {
+                "SMA7": 163.7,
+                "SMA30": 156.01,
+                "RSI14": 100.0
+            },
+            "forecast_next_days": [
+                166.37,
+                167.04,
+                167.72,
+                168.4,
+                169.08
+            ]
+        },
+        {
+            "symbol": "FPT",
+            "latest_price": 165.8,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "AI khuyến nghị thận trọng với FPT trong ngắn hạn. Lý do: RSI quá mua. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Có thể bỏ lỡ cơ hội nếu thị trường đảo chiều.",
+            "generated_at": "2025-10-15T09:31:15",
+            "technical_indicators": {
+                "SMA7": 163.7,
+                "SMA30": 156.01,
+                "RSI14": 100.0
+            },
+            "forecast_next_days": [
+                166.37,
+                167.04,
+                167.72,
+                168.4,
+                169.08
+            ]
+        }
+    ]
+}

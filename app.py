@@ -15,12 +15,19 @@ from indicators import add_indicators, get_latest_indicators
 from predictor import forecast_price_regression
 from ai_module import get_ai_advice, get_ai_confidence_score
 from logger import append_daily_log
-from visualizer import make_price_chart, create_combined_chart
+from visualizer import make_price_chart, create_combined_chart, create_candlestick_chart
 from utils import (
     get_default_date_range, validate_symbol, validate_date_range,
     get_current_datetime_iso, truncate_json_for_display, normalize_symbol,
     get_config, is_data_short
 )
+
+# Import cho export functionality
+from logger import export_today_report
+
+# Session state initialization cho export button
+if "export_result" not in st.session_state:
+    st.session_state.export_result = ""
 
 
 def main():
@@ -90,6 +97,13 @@ def main():
             width='stretch'
         )
         
+        # Nút xuất báo cáo (đặt dưới nút phân tích)
+        export_button = st.button(
+            "📄 Xuất báo cáo hôm nay",
+            key="export_today_btn",
+            width='stretch'
+        )
+        
         # Hiển thị thông tin dữ liệu
         if symbol:
             _show_data_info(symbol)
@@ -97,6 +111,8 @@ def main():
     # Main content
     if analyze_button:
         _perform_analysis(symbol, start_date, end_date, forecast_days)
+    elif export_button:
+        _handle_export()
     else:
         _show_welcome_message()
 
@@ -119,6 +135,70 @@ def _show_data_info(symbol: str):
         pass
 
 
+def _handle_export():
+    """Xử lý xuất báo cáo"""
+    st.subheader("📤 Xuất báo cáo hôm nay")
+    
+    export_format = get_config("EXPORT_FORMAT", "both")
+    
+    try:
+        export_result = export_today_report(export_format)
+        st.session_state.export_result = export_result
+        st.success(export_result)
+        
+        # Thêm download buttons
+        _show_download_buttons()
+        
+    except Exception as e:
+        error_msg = f"❌ Lỗi xuất báo cáo: {str(e)}"
+        st.session_state.export_result = error_msg
+        st.error(error_msg)
+    
+    # Hiển thị thông tin về file log
+    st.subheader("📁 Thông tin file")
+    report_dir = get_config("REPORT_DIR", "reports")
+    export_dir = get_config("EXPORT_DIR", "export")
+    st.write(f"**Thư mục log:** `{report_dir}/`")
+    st.write(f"**Thư mục export:** `{export_dir}/`")
+    st.write(f"**Định dạng file:** `YYYY-MM-DD.json`")
+    st.write(f"**File xuất:** `YYYY-MM-DD_report.csv/pdf`")
+
+
+def _show_download_buttons():
+    """Hiển thị nút download file đã export"""
+    import os
+    from datetime import datetime
+    
+    today = datetime.now().strftime("%Y-%m-%d")
+    export_dir = get_config("EXPORT_DIR", "export")
+    
+    st.subheader("💾 Tải xuống file")
+    
+    # CSV download
+    csv_path = f"{export_dir}/{today}_report.csv"
+    if os.path.exists(csv_path):
+        with open(csv_path, "rb") as f:
+            csv_data = f.read()
+        st.download_button(
+            label="📄 Tải xuống CSV",
+            data=csv_data,
+            file_name=f"{today}_report.csv",
+            mime="text/csv"
+        )
+    
+    # PDF download
+    pdf_path = f"{export_dir}/{today}_report.pdf"
+    if os.path.exists(pdf_path):
+        with open(pdf_path, "rb") as f:
+            pdf_data = f.read()
+        st.download_button(
+            label="📘 Tải xuống PDF",
+            data=pdf_data,
+            file_name=f"{today}_report.pdf",
+            mime="application/pdf"
+        )
+
+
 def _show_welcome_message():
     """Hiển thị thông điệp chào mừng"""
     st.markdown("""
@@ -129,11 +209,13 @@ def _show_welcome_message():
     - 🔮 Dự đoán xu hướng ngắn hạn bằng Linear Regression
     - 🤖 Nhận lời khuyên từ AI (hiện tại là giả lập)
     - 📈 Xem biểu đồ trực quan và chi tiết
+    - 📄 Xuất báo cáo CSV/PDF
     
     **Cách sử dụng:**
     1. Chọn mã cổ phiếu từ danh sách
     2. Thiết lập khoảng thời gian phân tích
     3. Nhấn nút "Phân tích" để bắt đầu
+    4. Nhấn nút "Xuất báo cáo hôm nay" để xuất file
     
     **Dữ liệu mẫu có sẵn:** FPT, VNM
     """)
@@ -252,7 +334,7 @@ def _display_results(result_json: dict, df: pd.DataFrame, log_result: dict):
     st.success(f"✅ Đã ghi vào {log_result['file_path']} — Tổng số hôm nay: {log_result['total_records_today']}")
     
     # Tabs cho kết quả
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Tổng quan", "📈 Biểu đồ", "📋 Kết quả JSON", "🤖 Lời khuyên AI", "📤 Xuất báo cáo"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Tổng quan", "📈 Biểu đồ", "📋 Kết quả JSON", "🤖 Lời khuyên AI"])
     
     with tab1:
         _show_overview(result_json, df)
@@ -265,9 +347,6 @@ def _display_results(result_json: dict, df: pd.DataFrame, log_result: dict):
     
     with tab4:
         _show_ai_advice(result_json)
-    
-    with tab5:
-        _show_export_tab()
 
 
 def _show_overview(result_json: dict, df: pd.DataFrame):
@@ -335,13 +414,24 @@ def _show_overview(result_json: dict, df: pd.DataFrame):
 def _show_charts(result_json: dict, df: pd.DataFrame):
     """Hiển thị biểu đồ"""
     
-    chart_mode = st.radio("🎨 Chọn loại biểu đồ", ["Biểu đồ giá", "Biểu đồ tổng hợp"])
+    st.subheader("📈 Biểu đồ phân tích")
     
-    if chart_mode == "Biểu đồ tổng hợp":
-        fig = create_combined_chart(df, result_json['symbol'])
-    else:
-        fig = make_price_chart(df, result_json['symbol'])
-    st.pyplot(fig)
+    # Hiển thị cả 3 loại biểu đồ theo chiều dọc
+    st.markdown("### 📊 Biểu đồ giá (Close + MA)")
+    fig1 = make_price_chart(df, result_json['symbol'])
+    st.pyplot(fig1)
+    
+    st.markdown("### 🕯️ Biểu đồ Candlestick (OHLC + MA + Volume)")
+    try:
+        fig2 = create_candlestick_chart(df, result_json['symbol'])
+        st.pyplot(fig2)
+    except ValueError as e:
+        st.warning(f"⚠️ Không thể tạo biểu đồ Candlestick: {str(e)}")
+        st.info("💡 Biểu đồ Candlestick cần dữ liệu OHLCV đầy đủ (Open, High, Low, Close, Volume)")
+    
+    st.markdown("### 📈 Biểu đồ tổng hợp (Close + MA + RSI + Volume)")
+    fig3 = create_combined_chart(df, result_json['symbol'])
+    st.pyplot(fig3)
 
 
 def _show_json_result(result_json: dict):
@@ -395,31 +485,9 @@ def _show_ai_advice(result_json: dict):
     )
 
 
-def _show_export_tab():
-    """Hiển thị tab xuất báo cáo"""
-    st.subheader("📤 Xuất dữ liệu báo cáo")
-    
-    export_format = get_config("EXPORT_FORMAT", "both")
-    
-    st.info(f"💡 Định dạng xuất hiện tại: **{export_format}** (cấu hình trong .env)")
-    
-    if st.button("📄 Xuất báo cáo hôm nay", type="primary"):
-        try:
-            from logger import export_today_report
-            export_result = export_today_report(export_format)
-            st.success(export_result)
-        except Exception as e:
-            st.error(f"❌ Lỗi xuất báo cáo: {str(e)}")
-    
-    # Hiển thị thông tin về file log
-    st.subheader("📁 Thông tin file log")
-    report_dir = get_config("REPORT_DIR", "reports")
-    st.write(f"**Thư mục lưu log:** `{report_dir}/`")
-    st.write(f"**Định dạng file:** `YYYY-MM-DD.json`")
-    st.write(f"**File xuất:** `YYYY-MM-DD_report.csv/pdf`")
 
 
 if __name__ == "__main__":
     main()
     st.caption("🎯 Project AI Stock Insight đã sẵn sàng chạy thử — nhập mã 'FPT' và chọn khoảng 60 ngày gần nhất để phân tích.")
-    print("🎉 Dự án AI Stock Insight đã được nâng cấp và sẵn sàng demo.")
+    print("✅ Export button moved outside tabs - should work now!")
