@@ -248,7 +248,7 @@ def get_market_sentiment(symbol: str, result_json: Dict) -> str:
         result_json: Kết quả phân tích
         
     Returns:
-        Tâm lý thị trường: "Bullish", "Bearish", "Neutral"
+        Tâm lý thị trường: "Tích cực", "Tiêu cực", "Trung lập"
     """
     signal = result_json.get('signal', 'HOLD')
     trend = result_json.get('trend', 'Sideways')
@@ -284,11 +284,11 @@ def get_market_sentiment(symbol: str, result_json: Dict) -> str:
     
     # Xác định tâm lý
     if bullish_signals > bearish_signals:
-        return "Bullish"
+        return "Tích cực"
     elif bearish_signals > bullish_signals:
-        return "Bearish"
+        return "Tiêu cực"
     else:
-        return "Neutral"
+        return "Trung lập"
 
 
 def call_real_ai_api(json_data: dict) -> str:

@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 from typing import Optional, List
+import mplfinance as mpf
 
 
 def make_price_chart(df: pd.DataFrame, symbol: str, forecast_days: Optional[List[float]] = None) -> plt.Figure:
@@ -350,3 +351,124 @@ def save_chart(fig: plt.Figure, filename: str, dpi: int = 300) -> str:
                 facecolor='white', edgecolor='none')
     
     return str(file_path)
+
+
+def create_candlestick_chart(df: pd.DataFrame, symbol: str, forecast_days: Optional[List[float]] = None) -> plt.Figure:
+    """
+    Tạo biểu đồ Candlestick với các đường trung bình động
+    
+    Args:
+        df: DataFrame chứa dữ liệu OHLCV
+        symbol: Mã cổ phiếu
+        forecast_days: Danh sách giá dự đoán (tùy chọn)
+        
+    Returns:
+        matplotlib Figure object
+    """
+    if df.empty:
+        raise ValueError("DataFrame rỗng, không thể tạo biểu đồ")
+    
+    # Chuẩn bị dữ liệu cho mplfinance
+    df_copy = df.copy()
+    
+    # Đảm bảo có đủ cột OHLCV
+    required_columns = ['Open', 'High', 'Low', 'Close', 'Volume']
+    missing_columns = [col for col in required_columns if col not in df_copy.columns]
+    
+    if missing_columns:
+        raise ValueError(f"DataFrame thiếu các cột: {missing_columns}")
+    
+    # Đặt Date làm index
+    df_copy = df_copy.set_index('Date')
+    
+    # Chuẩn bị style cho candlestick
+    mc = mpf.make_marketcolors(
+        up='#00ff00',      # Màu xanh cho nến tăng
+        down='#ff0000',   # Màu đỏ cho nến giảm
+        edge='black',      # Viền nến
+        wick={'up': 'black', 'down': 'black'},  # Bóng nến
+        volume='lightblue'  # Màu volume
+    )
+    
+    style = mpf.make_mpf_style(
+        marketcolors=mc,
+        gridstyle='-',
+        gridcolor='lightgray',
+        y_on_right=False,
+        facecolor='white'
+    )
+    
+    # Chuẩn bị các đường MA
+    addplot = []
+    
+    if 'SMA7' in df_copy.columns:
+        addplot.append(mpf.make_addplot(df_copy['SMA7'], color='orange', width=1.5, alpha=0.7))
+    
+    if 'SMA30' in df_copy.columns:
+        addplot.append(mpf.make_addplot(df_copy['SMA30'], color='green', width=1.5, alpha=0.7))
+    
+    # Tạo figure với subplot
+    fig, axes = mpf.plot(
+        df_copy,
+        type='candle',
+        style=style,
+        addplot=addplot if addplot else None,
+        volume=True,
+        figsize=(14, 10),
+        returnfig=True,
+        title=f'Biểu đồ Candlestick - {symbol}',
+        ylabel='Giá (VND)',
+        ylabel_lower='Volume',
+        tight_layout=True
+    )
+    
+    # Thêm forecast nếu có
+    if forecast_days:
+        _add_forecast_to_candlestick(axes[0], df_copy, forecast_days)
+    
+    # Cấu hình thêm
+    axes[0].set_title(f'Biểu đồ Candlestick - {symbol}', fontsize=16, fontweight='bold', pad=20)
+    axes[0].grid(True, alpha=0.3)
+    
+    # Thêm legend
+    legend_elements = []
+    legend_elements.append(plt.Line2D([0], [0], color='orange', linewidth=2, label='SMA(7)'))
+    legend_elements.append(plt.Line2D([0], [0], color='green', linewidth=2, label='SMA(30)'))
+    if forecast_days:
+        legend_elements.append(plt.Line2D([0], [0], color='red', linewidth=2, linestyle='--', label='Dự đoán'))
+    
+    axes[0].legend(handles=legend_elements, loc='upper left')
+    
+    return fig
+
+
+def _add_forecast_to_candlestick(ax: plt.Axes, df: pd.DataFrame, forecast_days: List[float]) -> None:
+    """
+    Thêm đường dự đoán vào biểu đồ Candlestick
+    
+    Args:
+        ax: matplotlib Axes object
+        df: DataFrame dữ liệu với Date index
+        forecast_days: Danh sách giá dự đoán
+    """
+    if not forecast_days:
+        return
+    
+    # Tạo ngày cho dự đoán
+    last_date = df.index[-1]
+    forecast_dates = []
+    
+    for i in range(1, len(forecast_days) + 1):
+        # Bỏ qua cuối tuần (giả sử thị trường chỉ mở T2-T6)
+        next_date = last_date + timedelta(days=i)
+        while next_date.weekday() >= 5:  # Thứ 7 = 5, Chủ nhật = 6
+            next_date += timedelta(days=1)
+        forecast_dates.append(next_date)
+    
+    # Vẽ đường dự đoán
+    ax.plot(forecast_dates, forecast_days, color='red', linewidth=2, 
+            linestyle='--', alpha=0.8, label='Dự đoán')
+    
+    # Đánh dấu điểm cuối
+    ax.scatter(forecast_dates[-1], forecast_days[-1], 
+              color='red', s=50, zorder=5)
