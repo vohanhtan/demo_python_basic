@@ -252,6 +252,27 @@
                 38.39,
                 38.56
             ]
+        },
+        {
+            "symbol": "BVH",
+            "latest_price": 37.72,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho BVH, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-15T20:10:15",
+            "technical_indicators": {
+                "SMA7": 36.89,
+                "SMA30": 36.28,
+                "RSI14": 69.64
+            },
+            "forecast_next_days": [
+                37.52,
+                37.57,
+                37.61,
+                37.65,
+                37.7
+            ]
         }
     ]
 }

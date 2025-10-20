@@ -159,7 +159,7 @@ def get_latest_indicators(df: pd.DataFrame) -> dict:
         indicators['SMA30'] = round(latest['SMA30'], 2)
     
     # Lấy RSI14
-    if 'RSI14' in df.columns:
+    if 'RSI14' in df.columns and latest['RSI14'] is not None:
         indicators['RSI14'] = round(latest['RSI14'], 2)
     
     return indicators

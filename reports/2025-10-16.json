@@ -1,0 +1,68 @@
+{
+    "date": "2025-10-16",
+    "records": [
+        {
+            "symbol": "AMZN",
+            "latest_price": 215.57,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "AI khuyến nghị giữ nguyên vị thế AMZN hiện tại. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T14:27:13",
+            "technical_indicators": {
+                "SMA7": 220.45,
+                "SMA30": 225.5,
+                "RSI14": 37.27
+            },
+            "forecast_next_days": [
+                218.86,
+                218.66,
+                218.46,
+                218.26,
+                218.06
+            ]
+        },
+        {
+            "symbol": "BVH",
+            "latest_price": 37.72,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho BVH, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T14:27:54",
+            "technical_indicators": {
+                "SMA7": 36.89,
+                "SMA30": 36.28,
+                "RSI14": 69.65
+            },
+            "forecast_next_days": [
+                37.56,
+                37.63,
+                37.71,
+                37.79,
+                37.86
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 249.34,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "AI khuyến nghị giữ nguyên vị thế AAPL hiện tại. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T15:02:03",
+            "technical_indicators": {
+                "SMA7": 251.23,
+                "SMA30": 247.0,
+                "RSI14": 44.91
+            },
+            "forecast_next_days": [
+                246.77,
+                247.26,
+                247.74,
+                248.22,
+                248.71
+            ]
+        }
+    ]
+}
