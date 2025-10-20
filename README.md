@@ -387,9 +387,14 @@ pip install --upgrade matplotlib
 - 3 loại biểu đồ hiển thị độc lập, lỗi một loại không ảnh hưởng loại khác
 
 ### Lỗi Candlestick
-- Đảm bảo đã cài đặt `mplfinance>=0.12.10`
+- Đảm bảo đã cài đặt `mplfinance==0.12.10b0` (version cụ thể)
 - Biểu đồ Candlestick cần dữ liệu OHLCV đầy đủ
 - Nếu thiếu dữ liệu, sẽ hiển thị warning và fallback sang biểu đồ khác
+
+### Lỗi Deploy Streamlit Cloud
+- **Lỗi mplfinance**: `mplfinance>=0.12.10` không tồn tại trên PyPI
+- **Giải pháp**: Sử dụng `mplfinance==0.12.10b0` (beta version)
+- **Lý do**: Version stable 0.12.10 chưa được release, chỉ có beta
 
 ### Lỗi dự đoán
 - Dự đoán có fallback thông minh

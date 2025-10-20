@@ -126,6 +126,48 @@
                 180.64,
                 180.83
             ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 252.29,
+            "trend": "Uptrend",
+            "signal": "BUY",
+            "reason": "Xu hướng tăng, RSI chưa quá mua, SMA7 > SMA30",
+            "ai_advice": "AI nhận định AAPL có tiềm năng tăng giá ngắn hạn. Các yếu tố hỗ trợ: Xu hướng tăng rõ ràng, RSI trong vùng an toàn, SMA ngắn hạn vượt SMA dài hạn. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Nên đặt stop-loss để bảo vệ vốn.",
+            "generated_at": "2025-10-20T10:38:56",
+            "technical_indicators": {
+                "SMA7": 249.12,
+                "SMA30": 247.67,
+                "RSI14": 54.66
+            },
+            "forecast_next_days": [
+                252.32,
+                254.36,
+                256.39,
+                258.42,
+                260.45
+            ]
+        },
+        {
+            "symbol": "MSFT",
+            "latest_price": 513.58,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Phân tích cho thấy MSFT đang trong giai đoạn chờ đợi. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-20T10:39:11",
+            "technical_indicators": {
+                "SMA7": 514.23,
+                "SMA30": 512.78,
+                "RSI14": 46.04
+            },
+            "forecast_next_days": [
+                510.61,
+                511.06,
+                511.5,
+                511.94,
+                512.39
+            ]
         }
     ]
 }
