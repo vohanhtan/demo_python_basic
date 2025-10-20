@@ -312,7 +312,7 @@ def _add_summary_chart_to_pdf(pdf, records):
         prices = [r.get('latest_price', 0) for r in records]
         ax2.bar(symbols, prices)
         ax2.set_title('Gia hien tai cac ma')
-        ax2.set_ylabel('Gia (VND)')
+        ax2.set_ylabel('Gia (USD)')
         plt.xticks(rotation=45)
         
         plt.tight_layout()
@@ -369,7 +369,7 @@ def _add_stock_chart_to_pdf(pdf, symbol, record):
             ax.plot(df_with_indicators.index, df_with_indicators['SMA30'], label='SMA30', alpha=0.7)
         
         ax.set_title(f'Bieu do gia {symbol}')
-        ax.set_ylabel('Gia (VND)')
+        ax.set_ylabel('Gia (USD)')
         ax.legend()
         ax.grid(True, alpha=0.3)
         
@@ -548,7 +548,7 @@ def export_today_report(fmt="both"):
                 # Chi tiết
                 pdf.set_font("Arial", size=10)
                 text = f"""
-Gia hien tai: {price:,} VND
+Gia hien tai: ${price:,.2f}
 Xu huong: {to_ascii(trend)}
 Tin hieu: {to_ascii(signal)}
 Ly do: {to_ascii(reason)}

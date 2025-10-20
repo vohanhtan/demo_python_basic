@@ -82,8 +82,11 @@ def get_stock_data(symbol: str, start_date: str, end_date: str) -> pd.DataFrame:
     except pd.errors.ParserError as e:
         raise ValueError(f"Lỗi parse CSV {csv_path.name}: {str(e)}")
     except Exception as e:
-        raise ValueError(f"Lỗi không xác định khi đọc dữ liệu {symbol}: {str(e)}")
+        raise RuntimeError(f"Lỗi khi tải dữ liệu từ Yahoo Finance: {e}")
 
+    # Kiểm tra kết quả
+    if df is None or df.empty:
+        raise ValueError(f"Không tìm thấy dữ liệu cho mã '{symbol}' trong khoảng {start_date} đến {end_date}.")
 
 def get_available_symbols() -> List[str]:
     """

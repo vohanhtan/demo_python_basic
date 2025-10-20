@@ -105,7 +105,7 @@ def _configure_chart(ax: plt.Axes, symbol: str, df: pd.DataFrame) -> None:
     
     # Nhãn trục
     ax.set_xlabel('Ngày', fontsize=12)
-    ax.set_ylabel('Giá (VND)', fontsize=12)
+    ax.set_ylabel('Giá (USD)', fontsize=12)
     
     # Định dạng trục x (ngày)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d/%m'))
@@ -291,7 +291,7 @@ def create_combined_chart(df: pd.DataFrame, symbol: str, forecast_days: Optional
         _add_forecast_to_chart(ax1, df, forecast_days)
     
     ax1.set_title(f'Phân tích kỹ thuật {symbol}', fontsize=16, fontweight='bold')
-    ax1.set_ylabel('Giá (VND)', fontsize=12)
+    ax1.set_ylabel('Giá (USD)', fontsize=12)
     ax1.grid(True, alpha=0.3)
     ax1.legend(loc='upper left')
     
@@ -378,8 +378,17 @@ def create_candlestick_chart(df: pd.DataFrame, symbol: str, forecast_days: Optio
     if missing_columns:
         raise ValueError(f"DataFrame thiếu các cột: {missing_columns}")
     
-    # Đặt Date làm index
+    # Đảm bảo có cột Date
+    if 'Date' not in df_copy.columns:
+        df_copy = df_copy.reset_index()
+    
+    # Chuyển Date thành DatetimeIndex
+    df_copy['Date'] = pd.to_datetime(df_copy['Date'])
     df_copy = df_copy.set_index('Date')
+    
+    # Đảm bảo index là DatetimeIndex
+    if not isinstance(df_copy.index, pd.DatetimeIndex):
+        df_copy.index = pd.to_datetime(df_copy.index)
     
     # Chuẩn bị style cho candlestick
     mc = mpf.make_marketcolors(
@@ -408,19 +417,23 @@ def create_candlestick_chart(df: pd.DataFrame, symbol: str, forecast_days: Optio
         addplot.append(mpf.make_addplot(df_copy['SMA30'], color='green', width=1.5, alpha=0.7))
     
     # Tạo figure với subplot
-    fig, axes = mpf.plot(
-        df_copy,
-        type='candle',
-        style=style,
-        addplot=addplot if addplot else None,
-        volume=True,
-        figsize=(14, 10),
-        returnfig=True,
-        title=f'Biểu đồ Candlestick - {symbol}',
-        ylabel='Giá (VND)',
-        ylabel_lower='Volume',
-        tight_layout=True
-    )
+    plot_kwargs = {
+        'type': 'candle',
+        'style': style,
+        'volume': True,
+        'figsize': (14, 10),
+        'returnfig': True,
+        'title': f'Biểu đồ Candlestick - {symbol}',
+        'ylabel': 'Giá (USD)',
+        'ylabel_lower': 'Volume',
+        'tight_layout': True
+    }
+    
+    # Chỉ thêm addplot nếu có dữ liệu
+    if addplot:
+        plot_kwargs['addplot'] = addplot
+    
+    fig, axes = mpf.plot(df_copy, **plot_kwargs)
     
     # Thêm forecast nếu có
     if forecast_days:
