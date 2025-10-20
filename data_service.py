@@ -1,185 +1,184 @@
 """
-Module đọc và xử lý dữ liệu cổ phiếu từ CSV
-Chức năng chính: đọc file CSV, lọc theo mã cổ phiếu và khoảng ngày
+data_service.py
+----------------
+Phiên bản dùng dữ liệu thật từ Yahoo Finance.
+Không còn đọc CSV hay giả lập — toàn bộ dữ liệu được tải qua yfinance.
+
+Public function giữ nguyên chữ ký:
+    get_stock_data(symbol: str, start_date: str, end_date: str) -> pd.DataFrame
 """
 
+import yfinance as yf
 import pandas as pd
-from pathlib import Path
-from typing import Optional
-from utils import normalize_symbol, parse_date, validate_date_range
-
+from datetime import datetime, timedelta
 
 def get_stock_data(symbol: str, start_date: str, end_date: str) -> pd.DataFrame:
     """
-    Đọc dữ liệu cổ phiếu từ file CSV, lọc theo khoảng ngày
+    Lấy dữ liệu chứng khoán thật từ Yahoo Finance trong khoảng thời gian chỉ định.
     
     Args:
-        symbol: Mã cổ phiếu (ví dụ: FPT, VNM)
-        start_date: Ngày bắt đầu (YYYY-MM-DD)
-        end_date: Ngày kết thúc (YYYY-MM-DD)
-        
+        symbol (str): Mã cổ phiếu (ví dụ: 'AAPL', 'MSFT', 'TSLA', 'NVDA', 'GOOG', 'META', 'AMZN', 'NFLX', 'AMD', 'JPM')
+        start_date (str): Ngày bắt đầu, định dạng 'YYYY-MM-DD'
+        end_date (str): Ngày kết thúc, định dạng 'YYYY-MM-DD'
+    
     Returns:
-        DataFrame chứa dữ liệu đã lọc, sắp xếp theo ngày tăng dần
-        
-    Raises:
-        FileNotFoundError: Nếu file CSV không tồn tại
-        ValueError: Nếu dữ liệu không hợp lệ hoặc khoảng ngày trống
+        pd.DataFrame: DataFrame với các cột:
+            Date, Symbol, Open, High, Low, Close, Volume
     """
-    # Chuẩn hóa mã cổ phiếu
-    symbol = normalize_symbol(symbol)
-    
-    # Validate khoảng ngày
-    validate_date_range(start_date, end_date)
-    
-    # Đường dẫn file CSV
-    data_dir = Path(__file__).parent / "data"
-    csv_file = data_dir / f"{symbol}.csv"
-    
-    # Kiểm tra file tồn tại
-    if not csv_file.exists():
-        raise FileNotFoundError(
-            f"Không tìm thấy dữ liệu cho mã {symbol}. "
-            f"Vui lòng kiểm tra file data/{symbol}.csv"
-        )
-    
+
+    # Đảm bảo symbol hợp lệ
+    symbol = symbol.strip().upper()
+
+    # Yahoo yêu cầu end_date là exclusive => cộng thêm 1 ngày
+    end_plus = (datetime.fromisoformat(end_date) + timedelta(days=1)).strftime("%Y-%m-%d")
+
+    # Tải dữ liệu từ Yahoo
     try:
-        # Đọc CSV
-        df = pd.read_csv(csv_file)
-        
-        # Kiểm tra cột bắt buộc
-        required_columns = ['Date', 'Symbol', 'Open', 'High', 'Low', 'Close', 'Volume']
-        missing_columns = [col for col in required_columns if col not in df.columns]
-        if missing_columns:
-            raise ValueError(f"File CSV thiếu các cột: {', '.join(missing_columns)}")
-        
-        # Chuyển đổi cột Date thành datetime
-        df['Date'] = pd.to_datetime(df['Date'])
-        
-        # Lọc theo khoảng ngày
-        start_dt = parse_date(start_date)
-        end_dt = parse_date(end_date)
-        
-        df_filtered = df[
-            (df['Date'] >= start_dt) & 
-            (df['Date'] <= end_dt)
-        ].copy()
-        
-        # Kiểm tra có dữ liệu sau khi lọc
-        if df_filtered.empty:
-            raise ValueError(
-                f"Không có dữ liệu cho mã {symbol} trong khoảng ngày "
-                f"từ {start_date} đến {end_date}"
-            )
-        
-        # Sắp xếp theo ngày tăng dần
-        df_filtered = df_filtered.sort_values('Date').reset_index(drop=True)
-        
-        # Kiểm tra dữ liệu hợp lệ
-        _validate_data_quality(df_filtered, symbol)
-        
-        return df_filtered
-        
-    except pd.errors.EmptyDataError:
-        raise ValueError(f"File CSV {symbol}.csv rỗng hoặc không có dữ liệu hợp lệ")
-    except pd.errors.ParserError as e:
-        raise ValueError(f"Lỗi đọc file CSV {symbol}.csv: {str(e)}")
+        df = yf.download(symbol, start=start_date, end=end_plus, progress=False, threads=False)
     except Exception as e:
-        raise ValueError(f"Lỗi không xác định khi đọc dữ liệu {symbol}: {str(e)}")
+        raise RuntimeError(f"Lỗi khi tải dữ liệu từ Yahoo Finance: {e}")
 
+    # Kiểm tra kết quả
+    if df is None or df.empty:
+        raise ValueError(f"Không tìm thấy dữ liệu cho mã '{symbol}' trong khoảng {start_date} đến {end_date}.")
 
-def _validate_data_quality(df: pd.DataFrame, symbol: str) -> None:
-    """
-    Validate chất lượng dữ liệu
+    # Reset index để có cột Date
+    df.reset_index(inplace=True)
     
-    Args:
-        df: DataFrame cần kiểm tra
-        symbol: Mã cổ phiếu (để hiển thị lỗi)
-        
-    Raises:
-        ValueError: Nếu dữ liệu không hợp lệ
-    """
-    # Kiểm tra giá trị null
-    null_columns = df.isnull().sum()
-    if null_columns.any():
-        null_cols = null_columns[null_columns > 0].index.tolist()
-        raise ValueError(f"Dữ liệu {symbol} có giá trị null ở cột: {', '.join(null_cols)}")
-    
-    # Kiểm tra giá âm
-    price_columns = ['Open', 'High', 'Low', 'Close']
-    for col in price_columns:
-        if (df[col] <= 0).any():
-            raise ValueError(f"Dữ liệu {symbol} có giá âm hoặc bằng 0 ở cột {col}")
-    
-    # Kiểm tra Volume âm
-    if (df['Volume'] < 0).any():
-        raise ValueError(f"Dữ liệu {symbol} có Volume âm")
-    
-    # Kiểm tra logic giá: High >= Low, High >= Open, High >= Close, Low <= Open, Low <= Close
-    if (df['High'] < df['Low']).any():
-        raise ValueError(f"Dữ liệu {symbol} có High < Low")
-    
-    if (df['High'] < df['Open']).any():
-        raise ValueError(f"Dữ liệu {symbol} có High < Open")
-    
-    if (df['High'] < df['Close']).any():
-        raise ValueError(f"Dữ liệu {symbol} có High < Close")
-    
-    if (df['Low'] > df['Open']).any():
-        raise ValueError(f"Dữ liệu {symbol} có Low > Open")
-    
-    if (df['Low'] > df['Close']).any():
-        raise ValueError(f"Dữ liệu {symbol} có Low > Close")
+    # Xử lý MultiIndex columns từ yfinance
+    if isinstance(df.columns, pd.MultiIndex):
+        # Flatten MultiIndex columns: (column_name, ticker) -> column_name
+        df.columns = df.columns.get_level_values(0)
+
+    # Chuẩn hóa schema
+    df.rename(columns={
+        "Date": "Date",
+        "Open": "Open",
+        "High": "High",
+        "Low": "Low",
+        "Close": "Close",
+        "Adj Close": "Close",  # phòng trường hợp Yahoo trả Adj Close
+        "Volume": "Volume"
+    }, inplace=True)
+
+    # Giữ đúng thứ tự cột và thêm Symbol
+    df["Symbol"] = symbol
+    df = df[["Date", "Symbol", "Open", "High", "Low", "Close", "Volume"]]
+
+    # Ép kiểu dữ liệu
+    df["Date"] = pd.to_datetime(df["Date"]).dt.date
+    numeric_cols = ["Open", "High", "Low", "Close", "Volume"]
+    for col in numeric_cols:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Loại bỏ dòng trống hoặc lỗi
+    df = df.dropna(subset=["Open", "High", "Low", "Close"])
+    df = df.sort_values("Date").reset_index(drop=True)
+
+    return df
 
 
 def get_available_symbols() -> list:
     """
-    Lấy danh sách các mã cổ phiếu có sẵn trong thư mục data
-    
-    Returns:
-        List các mã cổ phiếu có file CSV
+    Trả về danh sách các mã cổ phiếu phổ biến có thể phân tích.
     """
-    data_dir = Path(__file__).parent / "data"
-    
-    if not data_dir.exists():
-        return []
-    
-    symbols = []
-    for csv_file in data_dir.glob("*.csv"):
-        symbol = csv_file.stem.upper()
-        symbols.append(symbol)
-    
-    return sorted(symbols)
+    return [
+        "AAPL", "MSFT", "TSLA", "NVDA", "GOOG", "META", "AMZN", "NFLX", "AMD", "JPM",
+        "BAC", "WMT", "PG", "JNJ", "V", "UNH", "HD", "MA", "DIS", "PYPL",
+        "ADBE", "CRM", "INTC", "CSCO", "ORCL", "IBM", "QCOM", "TXN", "AVGO", "AMAT"
+    ]
 
 
-def get_data_info(symbol: str) -> dict:
+def get_data_info(symbol: str, start_date: str = None, end_date: str = None) -> dict:
     """
-    Lấy thông tin tổng quan về dữ liệu của một mã cổ phiếu
+    Lấy thông tin tổng quan về mã cổ phiếu từ Yahoo Finance.
     
     Args:
-        symbol: Mã cổ phiếu
+        symbol (str): Mã cổ phiếu
+        start_date (str): Ngày bắt đầu (optional, mặc định lấy 1 năm gần nhất)
+        end_date (str): Ngày kết thúc (optional, mặc định là hôm nay)
         
     Returns:
-        Dictionary chứa thông tin: số ngày, ngày đầu, ngày cuối, giá cao nhất, thấp nhất
+        dict: Thông tin cơ bản về mã cổ phiếu
     """
-    symbol = normalize_symbol(symbol)
-    data_dir = Path(__file__).parent / "data"
-    csv_file = data_dir / f"{symbol}.csv"
-    
-    if not csv_file.exists():
-        return {}
+    symbol = symbol.strip().upper()
     
     try:
-        df = pd.read_csv(csv_file)
-        df['Date'] = pd.to_datetime(df['Date'])
+        # Lấy thông tin cơ bản từ Yahoo
+        ticker = yf.Ticker(symbol)
+        info = ticker.info
+        
+        # Nếu không có start_date/end_date, lấy 1 năm gần nhất
+        if not start_date or not end_date:
+            from datetime import datetime, timedelta
+            end_date = datetime.now().strftime('%Y-%m-%d')
+            start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+        
+        # Lấy dữ liệu giá để tính toán thống kê
+        df = get_stock_data(symbol, start_date, end_date)
         
         return {
             'symbol': symbol,
+            'name': info.get('longName', symbol),
+            'sector': info.get('sector', 'Unknown'),
+            'industry': info.get('industry', 'Unknown'),
+            'market_cap': info.get('marketCap', 0),
+            'currency': info.get('currency', 'USD'),
+            'exchange': info.get('exchange', 'Unknown'),
+            # Thêm thông tin thống kê từ dữ liệu giá
             'total_days': len(df),
-            'start_date': df['Date'].min().strftime('%Y-%m-%d'),
-            'end_date': df['Date'].max().strftime('%Y-%m-%d'),
-            'highest_price': df['High'].max(),
-            'lowest_price': df['Low'].min(),
-            'avg_volume': df['Volume'].mean()
+            'start_date': df['Date'].min().strftime('%Y-%m-%d') if len(df) > 0 else 'N/A',
+            'end_date': df['Date'].max().strftime('%Y-%m-%d') if len(df) > 0 else 'N/A',
+            'highest_price': df['High'].max() if len(df) > 0 else 0,
+            'lowest_price': df['Low'].min() if len(df) > 0 else 0,
+            'avg_volume': df['Volume'].mean() if len(df) > 0 else 0
         }
-    except Exception:
-        return {}
+    except Exception as e:
+        return {
+            'symbol': symbol,
+            'name': symbol,
+            'sector': 'Unknown',
+            'industry': 'Unknown',
+            'market_cap': 0,
+            'currency': 'USD',
+            'exchange': 'Unknown',
+            'total_days': 0,
+            'start_date': 'N/A',
+            'end_date': 'N/A',
+            'highest_price': 0,
+            'lowest_price': 0,
+            'avg_volume': 0
+        }
+
+
+# Test function
+if __name__ == "__main__":
+    print("🧪 Testing data_service.py with real Yahoo Finance data...")
+    
+    try:
+        # Test với AAPL
+        df = get_stock_data("AAPL", "2024-07-01", "2024-10-01")
+        print(f"✅ AAPL data loaded: {df.shape}")
+        print(f"   Columns: {list(df.columns)}")
+        print(f"   Date range: {df['Date'].min()} to {df['Date'].max()}")
+        print(f"   Sample data:")
+        print(df.head())
+        
+        # Test với mã khác
+        df2 = get_stock_data("MSFT", "2024-08-01", "2024-09-01")
+        print(f"\n✅ MSFT data loaded: {df2.shape}")
+        
+        # Test get_available_symbols
+        symbols = get_available_symbols()
+        print(f"\n✅ Available symbols: {len(symbols)} symbols")
+        
+        # Test get_data_info
+        info = get_data_info("AAPL")
+        print(f"\n✅ AAPL info: {info['name']} ({info['sector']})")
+        
+        print("\n🎉 All tests passed!")
+        
+    except Exception as e:
+        print(f"❌ Test failed: {e}")
+        import traceback
+        traceback.print_exc()

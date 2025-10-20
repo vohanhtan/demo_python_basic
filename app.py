@@ -106,7 +106,7 @@ def main():
         
         # Hiển thị thông tin dữ liệu
         if symbol:
-            _show_data_info(symbol)
+            _show_data_info(symbol, str(start_date), str(end_date))
     
     # Main content
     if analyze_button:
@@ -117,22 +117,43 @@ def main():
         _show_welcome_message()
 
 
-def _show_data_info(symbol: str):
+def _show_data_info(symbol: str, start_date: str, end_date: str):
     """Hiển thị thông tin dữ liệu của mã cổ phiếu"""
     try:
-        info = get_data_info(symbol)
+        info = get_data_info(symbol, start_date, end_date)
         if info:
             st.markdown("---")
             st.subheader("📊 Thông tin dữ liệu")
-            st.write(f"**Mã:** {info['symbol']}")
-            st.write(f"**Số ngày:** {info['total_days']}")
-            st.write(f"**Từ:** {info['start_date']}")
-            st.write(f"**Đến:** {info['end_date']}")
-            st.write(f"**Giá cao nhất:** {info['highest_price']:,.0f} VND")
-            st.write(f"**Giá thấp nhất:** {info['lowest_price']:,.0f} VND")
-            st.write(f"**Volume TB:** {info['avg_volume']:,.0f}")
-    except Exception:
-        pass
+            
+            # Thông tin cơ bản
+            col1, col2 = st.columns(2)
+            with col1:
+                st.write(f"**Mã:** {info['symbol']}")
+                st.write(f"**Tên công ty:** {info['name']}")
+                st.write(f"**Ngành:** {info['sector']}")
+                st.write(f"**Lĩnh vực:** {info['industry']}")
+            
+            with col2:
+                st.write(f"**Sàn giao dịch:** {info['exchange']}")
+                st.write(f"**Tiền tệ:** {info['currency']}")
+                if info['market_cap'] > 0:
+                    st.write(f"**Vốn hóa:** ${info['market_cap']:,.0f}")
+            
+            # Thông tin thống kê
+            st.markdown("**📈 Thống kê giá:**")
+            col3, col4 = st.columns(2)
+            with col3:
+                st.write(f"**Số ngày:** {info['total_days']}")
+                st.write(f"**Từ:** {info['start_date']}")
+                st.write(f"**Đến:** {info['end_date']}")
+            
+            with col4:
+                st.write(f"**Giá cao nhất:** ${info['highest_price']:,.2f}")
+                st.write(f"**Giá thấp nhất:** ${info['lowest_price']:,.2f}")
+                st.write(f"**Volume TB:** {info['avg_volume']:,.0f}")
+                
+    except Exception as e:
+        st.error(f"Không thể tải thông tin cho mã {symbol}: {str(e)}")
 
 
 def _handle_export():
@@ -357,7 +378,7 @@ def _show_overview(result_json: dict, df: pd.DataFrame):
     with col1:
         st.metric(
             "💰 Giá hiện tại",
-            f"{result_json['latest_price']:,.0f} VND"
+            f"${result_json['latest_price']:,.2f}"
         )
     
     with col2:
@@ -402,7 +423,7 @@ def _show_overview(result_json: dict, df: pd.DataFrame):
     if forecast_days:
         forecast_df = pd.DataFrame({
             'Ngày': [f"T+{i+1}" for i in range(len(forecast_days))],
-            'Giá dự đoán (VND)': [f"{price:,.0f}" for price in forecast_days]
+            'Giá dự đoán (USD)': [f"${price:,.2f}" for price in forecast_days]
         })
         st.dataframe(forecast_df, width='stretch')
     
