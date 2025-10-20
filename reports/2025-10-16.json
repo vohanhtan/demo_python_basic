@@ -2,66 +2,75 @@
     "date": "2025-10-16",
     "records": [
         {
-            "symbol": "AMZN",
-            "latest_price": 215.57,
+            "symbol": "AAPL",
+            "latest_price": 201.7,
             "trend": "Sideways",
             "signal": "HOLD",
-            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
-            "ai_advice": "AI khuyến nghị giữ nguyên vị thế AMZN hiện tại. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
-            "generated_at": "2025-10-16T14:27:13",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho AAPL, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T15:44:45",
             "technical_indicators": {
-                "SMA7": 220.45,
-                "SMA30": 225.5,
-                "RSI14": 37.27
+                "SMA7": 199.97,
+                "SMA30": 204.32,
+                "RSI14": 47.15
             },
             "forecast_next_days": [
-                218.86,
-                218.66,
-                218.46,
-                218.26,
-                218.06
+                199.32,
+                199.31,
+                199.31,
+                199.3,
+                199.3,
+                199.29,
+                199.28
             ]
         },
         {
-            "symbol": "BVH",
-            "latest_price": 37.72,
+            "symbol": "MSFT",
+            "latest_price": 523.98,
             "trend": "Sideways",
             "signal": "HOLD",
-            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
-            "ai_advice": "Tín hiệu chưa rõ ràng cho BVH, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
-            "generated_at": "2025-10-16T14:27:54",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho MSFT, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T15:45:55",
             "technical_indicators": {
-                "SMA7": 36.89,
-                "SMA30": 36.28,
-                "RSI14": 69.65
+                "SMA7": 519.7,
+                "SMA30": 509.92,
+                "RSI14": 63.11
             },
             "forecast_next_days": [
-                37.56,
-                37.63,
-                37.71,
-                37.79,
-                37.86
+                521.79,
+                521.81,
+                521.82,
+                521.83,
+                521.84,
+                521.85,
+                521.86,
+                521.87,
+                521.89,
+                521.9
             ]
         },
         {
             "symbol": "AAPL",
-            "latest_price": 249.34,
+            "latest_price": 156.05,
             "trend": "Sideways",
             "signal": "HOLD",
             "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
-            "ai_advice": "AI khuyến nghị giữ nguyên vị thế AAPL hiện tại. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
-            "generated_at": "2025-10-16T15:02:03",
+            "ai_advice": "Phân tích cho thấy AAPL đang trong giai đoạn chờ đợi. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T15:48:02",
             "technical_indicators": {
-                "SMA7": 251.23,
-                "SMA30": 247.0,
-                "RSI14": 44.91
+                "SMA7": 154.09,
+                "SMA30": 150.02,
+                "RSI14": 65.75
             },
             "forecast_next_days": [
-                246.77,
-                247.26,
-                247.74,
-                248.22,
-                248.71
+                156.58,
+                156.58,
+                156.58,
+                156.58,
+                156.58,
+                156.58,
+                156.58
             ]
         }
     ]
