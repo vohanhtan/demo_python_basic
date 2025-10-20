@@ -1,0 +1,77 @@
+{
+    "date": "2025-10-16",
+    "records": [
+        {
+            "symbol": "AAPL",
+            "latest_price": 201.7,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho AAPL, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T15:44:45",
+            "technical_indicators": {
+                "SMA7": 199.97,
+                "SMA30": 204.32,
+                "RSI14": 47.15
+            },
+            "forecast_next_days": [
+                199.32,
+                199.31,
+                199.31,
+                199.3,
+                199.3,
+                199.29,
+                199.28
+            ]
+        },
+        {
+            "symbol": "MSFT",
+            "latest_price": 523.98,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho MSFT, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T15:45:55",
+            "technical_indicators": {
+                "SMA7": 519.7,
+                "SMA30": 509.92,
+                "RSI14": 63.11
+            },
+            "forecast_next_days": [
+                521.79,
+                521.81,
+                521.82,
+                521.83,
+                521.84,
+                521.85,
+                521.86,
+                521.87,
+                521.89,
+                521.9
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 156.05,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Phân tích cho thấy AAPL đang trong giai đoạn chờ đợi. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-16T15:48:02",
+            "technical_indicators": {
+                "SMA7": 154.09,
+                "SMA30": 150.02,
+                "RSI14": 65.75
+            },
+            "forecast_next_days": [
+                156.58,
+                156.58,
+                156.58,
+                156.58,
+                156.58,
+                156.58,
+                156.58
+            ]
+        }
+    ]
+}

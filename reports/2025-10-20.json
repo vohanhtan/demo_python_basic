@@ -1,0 +1,131 @@
+{
+    "date": "2025-10-20",
+    "records": [
+        {
+            "symbol": "AAPL",
+            "latest_price": 201.7,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Phân tích cho thấy AAPL đang trong giai đoạn chờ đợi. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-20T09:23:22",
+            "technical_indicators": {
+                "SMA7": 199.97,
+                "SMA30": 204.32,
+                "RSI14": 47.15
+            },
+            "forecast_next_days": [
+                200.59,
+                200.6,
+                200.6,
+                200.6,
+                200.6
+            ]
+        },
+        {
+            "symbol": "MSFT",
+            "latest_price": 461.21,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "Tín hiệu bán xuất hiện cho MSFT, nên xem xét chốt lời. Lý do: RSI quá mua. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Có thể bỏ lỡ cơ hội nếu thị trường đảo chiều.",
+            "generated_at": "2025-10-20T09:23:29",
+            "technical_indicators": {
+                "SMA7": 456.98,
+                "SMA30": 429.93,
+                "RSI14": 71.1
+            },
+            "forecast_next_days": [
+                459.26,
+                459.26,
+                459.27,
+                459.27,
+                459.28
+            ]
+        },
+        {
+            "symbol": "VNINDEX",
+            "latest_price": 1040.54,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho VNINDEX, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-20T09:23:35",
+            "technical_indicators": {
+                "SMA7": 1041.56,
+                "SMA30": 1046.65,
+                "RSI14": 48.61
+            },
+            "forecast_next_days": [
+                1037.18,
+                1037.19,
+                1037.2,
+                1037.21,
+                1037.22
+            ]
+        },
+        {
+            "symbol": "VNINDEX",
+            "latest_price": 1288.62,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Phân tích cho thấy VNINDEX đang trong giai đoạn chờ đợi. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-20T09:23:54",
+            "technical_indicators": {
+                "SMA7": 1285.31,
+                "SMA30": 1291.86,
+                "RSI14": 56.25
+            },
+            "forecast_next_days": [
+                1273.27,
+                1273.19,
+                1273.11,
+                1273.03,
+                1272.95
+            ]
+        },
+        {
+            "symbol": "VNINDEX",
+            "latest_price": 1288.62,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho VNINDEX, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-20T09:24:03",
+            "technical_indicators": {
+                "SMA7": 1285.31,
+                "SMA30": 1291.86,
+                "RSI14": 56.25
+            },
+            "forecast_next_days": [
+                1273.27,
+                1273.19,
+                1273.11,
+                1273.03,
+                1272.95
+            ]
+        },
+        {
+            "symbol": "VNINDEX",
+            "latest_price": 1288.62,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho VNINDEX, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-20T09:24:14",
+            "technical_indicators": {
+                "SMA7": 1285.31,
+                "SMA30": 1291.86,
+                "RSI14": 56.25
+            },
+            "forecast_next_days": [
+                1273.27,
+                1273.19,
+                1273.11,
+                1273.03,
+                1272.95
+            ]
+        }
+    ]
+}
