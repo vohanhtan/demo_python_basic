@@ -16,6 +16,7 @@ load_dotenv()
 def get_config(key: str, default=None):
     """
     Đọc biến môi trường từ .env, nếu không có thì trả giá trị mặc định
+    DEPRECATED: Sử dụng get_secret() từ utils.secrets_helper thay thế
     
     Args:
         key: Tên biến môi trường

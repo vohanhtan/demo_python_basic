@@ -1,0 +1,341 @@
+{
+    "date": "2025-10-21",
+    "records": [
+        {
+            "symbol": "MSFT",
+            "latest_price": 513.58,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho MSFT, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-21T14:54:27",
+            "technical_indicators": {
+                "SMA7": 514.23,
+                "SMA30": 512.78,
+                "RSI14": 46.01
+            },
+            "forecast_next_days": [
+                510.41,
+                510.68,
+                510.94,
+                511.21,
+                511.48
+            ]
+        },
+        {
+            "symbol": "MSFT",
+            "latest_price": 513.58,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "AI khuyến nghị giữ nguyên vị thế MSFT hiện tại. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-21T14:54:40",
+            "technical_indicators": {
+                "SMA7": 514.23,
+                "SMA30": 512.78,
+                "RSI14": 46.01
+            },
+            "forecast_next_days": [
+                510.41,
+                510.68,
+                510.94,
+                511.21,
+                511.48
+            ]
+        },
+        {
+            "symbol": "MSFT",
+            "latest_price": 513.58,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho MSFT, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-21T14:54:56",
+            "technical_indicators": {
+                "SMA7": 514.23,
+                "SMA30": 512.78,
+                "RSI14": 46.01
+            },
+            "forecast_next_days": [
+                510.41,
+                510.68,
+                510.94,
+                511.21,
+                511.48
+            ]
+        },
+        {
+            "symbol": "VNINDEX",
+            "latest_price": 1040.54,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "Tín hiệu chưa rõ ràng cho VNINDEX, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-21T15:10:26",
+            "technical_indicators": {
+                "SMA7": 1041.56,
+                "SMA30": 1046.65,
+                "RSI14": 48.61
+            },
+            "forecast_next_days": [
+                1034.72,
+                1034.67,
+                1034.61,
+                1034.55,
+                1034.49
+            ]
+        },
+        {
+            "symbol": "VNINDEX",
+            "latest_price": 1006.2,
+            "trend": "Uptrend",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Xu hướng tăng nhưng cần chờ SMA7 vượt SMA30",
+            "ai_advice": "Phân tích cho thấy VNINDEX đang trong giai đoạn chờ đợi. RSI quá bán, có thể phục hồi. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-21T15:16:05",
+            "technical_indicators": {
+                "SMA7": 1061.14,
+                "SMA30": 1185.13,
+                "RSI14": 16.19
+            },
+            "forecast_next_days": [
+                1028.67,
+                1028.6,
+                1028.53,
+                1028.47,
+                1028.4
+            ]
+        },
+        {
+            "symbol": "VNINDEX",
+            "latest_price": 1006.2,
+            "trend": "Uptrend",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Xu hướng tăng nhưng cần chờ SMA7 vượt SMA31",
+            "ai_advice": "Phân tích cho thấy VNINDEX đang trong giai đoạn chờ đợi. RSI quá bán, có thể phục hồi. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-21T15:18:10",
+            "technical_indicators": {
+                "SMA7": 1061.14,
+                "SMA30": 1185.13,
+                "RSI14": 16.19
+            },
+            "forecast_next_days": [
+                1028.67,
+                1028.6,
+                1028.53,
+                1028.47,
+                1028.4
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 262.24,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "Chế độ AI thật chưa kích hoạt trong phiên bản này.",
+            "generated_at": "2025-10-21T16:49:44",
+            "technical_indicators": {
+                "SMA7": 250.29,
+                "SMA30": 248.49,
+                "RSI14": 71.25
+            },
+            "forecast_next_days": [
+                255.32,
+                257.05,
+                258.78,
+                260.5,
+                262.23
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 262.24,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "Chế độ AI thật chưa kích hoạt trong phiên bản này.",
+            "generated_at": "2025-10-21T16:49:45",
+            "technical_indicators": {
+                "SMA7": 250.29,
+                "SMA30": 248.49,
+                "RSI14": 71.25
+            },
+            "forecast_next_days": [
+                255.32,
+                257.05,
+                258.78,
+                260.5,
+                262.23
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 262.24,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "**Khuyến nghị:** BÁN cổ phiếu AAPL.\n\n**Lý do:** Phân tích kỹ thuật cho thấy AAPL đang giao dịch trong xu hướng sideways. Chỉ số RSI (71.2) báo hiệu cổ phiếu đang trong vùng quá mua. Mặc dù SMA 7 ngày cao hơn SMA 30 ngày, tín hiệu SELL mạnh hơn do RSI và xu hướng sideways.\n\n**Cảnh báo:** Đây là phân tích kỹ thuật dựa trên dữ liệu hiện tại. Thị trường có thể biến động bất ngờ. Hãy xem xét kỹ lưỡng tình hình tài chính cá nhân và các yếu tố vĩ mô trước khi đưa ra quyết định đầu tư. Tham khảo thêm ý kiến của chuyên gia tài chính độc lập.",
+            "generated_at": "2025-10-21T17:06:19",
+            "technical_indicators": {
+                "SMA7": 250.29,
+                "SMA30": 248.49,
+                "RSI14": 71.25
+            },
+            "forecast_next_days": [
+                255.32,
+                257.05,
+                258.78,
+                260.5,
+                262.23
+            ]
+        },
+        {
+            "symbol": "TSLA",
+            "latest_price": 447.43,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "**Lời khuyên đầu tư TSLA:** GIỮ.\n\n**Lý do:** Dựa trên phân tích kỹ thuật, cổ phiếu TSLA đang trong xu hướng đi ngang (sideways). Chỉ số RSI ở mức trung tính (59.6) cho thấy không có dấu hiệu quá mua hay quá bán. Đường SMA 7 ngày cao hơn SMA 30 ngày cho thấy một chút tín hiệu tăng, nhưng không đủ mạnh để khẳng định xu hướng rõ ràng.\n\n**Rủi ro:** Thị trường đi ngang có thể biến động khó lường, giá có thể tăng hoặc giảm bất ngờ. Nhà đầu tư nên theo dõi sát sao và chờ đợi tín hiệu xác nhận xu hướng trước khi đưa ra quyết định giao dịch tiếp theo. Cần xem xét thêm các yếu tố cơ bản của doanh nghiệp trước khi đưa ra quyết định cuối cùng.",
+            "generated_at": "2025-10-21T17:07:13",
+            "technical_indicators": {
+                "SMA7": 432.75,
+                "SMA30": 424.32,
+                "RSI14": 59.56
+            },
+            "forecast_next_days": [
+                437.81,
+                441.52,
+                445.24,
+                448.95,
+                452.67
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 262.24,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "Dựa trên phân tích kỹ thuật cổ phiếu AAPL, tôi khuyến nghị **BÁN**.\n\nLý do: Thị trường đang đi ngang (sideways), chỉ số RSI (71.2) cho thấy cổ phiếu đang trong vùng quá mua, cùng với tín hiệu bán hiện tại. Mặc dù SMA 7 ngày cao hơn SMA 30 ngày, nhưng sự kết hợp của các yếu tố trên cho thấy áp lực giảm giá tiềm ẩn.\n\nCảnh báo: Phân tích kỹ thuật chỉ là một yếu tố trong quyết định đầu tư. Hãy cân nhắc kỹ tình hình tài chính cá nhân và tham khảo thêm các nguồn thông tin khác trước khi ra quyết định cuối cùng. Thị trường chứng khoán luôn tiềm ẩn rủi ro.",
+            "generated_at": "2025-10-21T17:20:13",
+            "technical_indicators": {
+                "SMA7": 250.29,
+                "SMA30": 248.49,
+                "RSI14": 71.25
+            },
+            "forecast_next_days": [
+                255.32,
+                257.05,
+                258.78,
+                260.5,
+                262.23
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 262.24,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "**Khuyến nghị:** Bán cổ phiếu AAPL.\n\n**Lý do:** Phân tích kỹ thuật cho thấy AAPL đang đi ngang (sideways) và RSI (71.2) báo hiệu tình trạng quá mua. Giá hiện tại gần với SMA 7 ngày và SMA 30 ngày, nhưng tín hiệu SELL từ phân tích tổng thể cho thấy áp lực bán có thể gia tăng.\n\n**Rủi ro:** Thị trường có thể đảo chiều bất ngờ, khiến giá tăng. Việc bán cổ phiếu có thể dẫn đến bỏ lỡ cơ hội tăng giá nếu xu hướng đảo chiều. Cần theo dõi sát biến động thị trường và có kế hoạch quản lý rủi ro phù hợp.",
+            "generated_at": "2025-10-21T17:33:16",
+            "technical_indicators": {
+                "SMA7": 250.29,
+                "SMA30": 248.49,
+                "RSI14": 71.25
+            },
+            "forecast_next_days": [
+                255.32,
+                257.05,
+                258.78,
+                260.5,
+                262.23
+            ]
+        },
+        {
+            "symbol": "MSFT",
+            "latest_price": 516.79,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "**Lời khuyên đầu tư:**\n\nDựa trên phân tích kỹ thuật cổ phiếu MSFT, chúng tôi khuyến nghị **GIỮ** cổ phiếu này.\n\n**Giải thích:**\n\nThị trường hiện đang trong xu hướng sideways, với chỉ số RSI trung tính và SMA 7 ngày gần bằng SMA 30 ngày, cho thấy sự cân bằng giữa lực mua và bán. Việc chờ đợi tín hiệu giao dịch rõ ràng hơn là thận trọng.\n\n**Cảnh báo rủi ro:**\n\nXu hướng sideways có thể thay đổi đột ngột. Nhà đầu tư nên theo dõi sát sao biến động giá và các chỉ báo kỹ thuật khác để có quyết định kịp thời. Luôn quản lý rủi ro và cân nhắc mục tiêu đầu tư cá nhân.",
+            "generated_at": "2025-10-21T17:33:33",
+            "technical_indicators": {
+                "SMA7": 513.43,
+                "SMA30": 513.4,
+                "RSI14": 53.51
+            },
+            "forecast_next_days": [
+                513.42,
+                513.72,
+                514.02,
+                514.32,
+                514.62
+            ]
+        },
+        {
+            "symbol": "TSLA",
+            "latest_price": 447.43,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "**Khuyến nghị cho TSLA:** Giữ (HOLD).\n\n**Lý do:** Phân tích kỹ thuật cho thấy TSLA đang trong xu hướng đi ngang (sideways). Chỉ số RSI (59.6) ở mức trung tính, không cho thấy dấu hiệu quá mua hay quá bán. SMA 7 ngày cao hơn SMA 30 ngày cho thấy động lực tăng nhẹ, nhưng chưa đủ mạnh để xác nhận xu hướng tăng rõ rệt.\n\n**Rủi ro:** Thị trường đi ngang có thể biến động khó lường. Giá có thể phá vỡ lên trên hoặc xuống dưới, tùy thuộc vào các yếu tố vĩ mô và thông tin doanh nghiệp. Cần theo dõi sát các tín hiệu và điều chỉnh chiến lược khi cần thiết.",
+            "generated_at": "2025-10-21T17:33:42",
+            "technical_indicators": {
+                "SMA7": 432.75,
+                "SMA30": 424.32,
+                "RSI14": 59.56
+            },
+            "forecast_next_days": [
+                437.81,
+                441.52,
+                445.24,
+                448.95,
+                452.67
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 262.24,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "**Khuyến nghị:** Bán (SELL) cổ phiếu AAPL.\n\n**Lý do:** Phân tích kỹ thuật cho thấy cổ phiếu đang đi ngang (Sideways) và RSI (71.2) cho thấy tình trạng quá mua. Giá trị RSI trên 70 thường báo hiệu khả năng điều chỉnh giảm. Thêm vào đó, tín hiệu hiện tại là Bán.\n\n**Cảnh báo rủi ro:** Thị trường chứng khoán luôn biến động. Phân tích kỹ thuật chỉ là một yếu tố tham khảo. Hãy cân nhắc kỹ lưỡng, tham khảo thêm các yếu tố khác (ví dụ: phân tích cơ bản, tin tức thị trường) và tự chịu trách nhiệm với quyết định đầu tư của bạn. Giá cả có thể thay đổi nhanh chóng.",
+            "generated_at": "2025-10-21T17:36:37",
+            "technical_indicators": {
+                "SMA7": 250.29,
+                "SMA30": 248.49,
+                "RSI14": 71.25
+            },
+            "forecast_next_days": [
+                255.32,
+                257.05,
+                258.78,
+                260.5,
+                262.23
+            ]
+        },
+        {
+            "symbol": "AAPL",
+            "latest_price": 262.24,
+            "trend": "Sideways",
+            "signal": "SELL",
+            "reason": "Thị trường sideways, RSI quá mua, nên bán",
+            "ai_advice": "**Lời khuyên đầu tư:** Bán cổ phiếu AAPL.\n\n**Giải thích:** Phân tích kỹ thuật cho thấy AAPL đang trong xu hướng đi ngang (sideways), kết hợp với chỉ số RSI (71.2) cho thấy cổ phiếu đang ở vùng quá mua. Tín hiệu bán được củng cố bởi các chỉ báo trung bình động (SMA 7 ngày cao hơn SMA 30 ngày nhưng không đủ mạnh để đảo ngược xu hướng).\n\n**Cảnh báo rủi ro:** Thị trường chứng khoán luôn tiềm ẩn rủi ro biến động. Giá có thể tăng trở lại, đặc biệt nếu có tin tức tích cực. Quyết định đầu tư cuối cùng nên dựa trên phân tích cá nhân và khả năng chấp nhận rủi ro của bạn.",
+            "generated_at": "2025-10-21T17:39:33",
+            "technical_indicators": {
+                "SMA7": 250.29,
+                "SMA30": 248.49,
+                "RSI14": 71.25
+            },
+            "forecast_next_days": [
+                255.32,
+                257.05,
+                258.78,
+                260.5,
+                262.23
+            ]
+        }
+    ]
+}

@@ -5,15 +5,31 @@ Sau này sẽ thay thế bằng API thật (OpenAI/Gemini/Claude)
 """
 
 import random
+import os
 from typing import Dict
-from utils import get_config
+from config.secrets_helper import get_secret
 
-# Flag để bật/tắt AI thật - đọc từ .env
-USE_REAL_AI = get_config("USE_REAL_AI", "False").lower() == "true"
+# Import Google Generative AI
+try:
+    from google.generativeai import GenerativeModel, configure
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    print("⚠️ Google Generative AI chưa được cài đặt. Chạy: pip install google-generativeai")
 
-# Cảnh báo nếu AI thật được bật
-if USE_REAL_AI:
-    print("⚙️ Chế độ AI thật đang bật, nhưng chưa có API thực tế. Đang fallback sang giả lập.")
+# Flag để bật/tắt AI thật - đọc từ secrets
+USE_REAL_AI = get_secret("USE_REAL_AI", "False").lower() == "true"
+GEMINI_API_KEY = get_secret("GEMINI_API_KEY", "")
+
+# Cấu hình Gemini nếu có API key
+if GEMINI_AVAILABLE and GEMINI_API_KEY:
+    configure(api_key=GEMINI_API_KEY)
+    gemini_model = GenerativeModel("gemini-2.0-flash-exp")
+    print("✅ Google Gemini API đã được cấu hình")
+elif USE_REAL_AI and not GEMINI_API_KEY:
+    print("⚠️ USE_REAL_AI=True nhưng chưa có GEMINI_API_KEY. Đang fallback sang giả lập.")
+elif USE_REAL_AI and not GEMINI_AVAILABLE:
+    print("⚠️ USE_REAL_AI=True nhưng chưa cài đặt google-generativeai. Đang fallback sang giả lập.")
 
 
 def get_ai_advice(result_json: Dict) -> str:
@@ -293,14 +309,75 @@ def get_market_sentiment(symbol: str, result_json: Dict) -> str:
 
 def call_real_ai_api(json_data: dict) -> str:
     """
-    Sau này dùng để gọi API OpenAI / Gemini
+    Gọi Google Gemini API để tạo lời khuyên đầu tư
     
     Args:
-        json_data: Kết quả phân tích
-        
+        json_data: Kết quả phân tích với các key:
+                  - symbol: mã cổ phiếu
+                  - trend: xu hướng
+                  - signal: tín hiệu
+                  - technical_indicators: chỉ báo kỹ thuật
+                  - reason: lý do tín hiệu
+                  
     Returns:
-        Lời khuyên từ AI thật
+        Lời khuyên từ Gemini AI bằng tiếng Việt
     """
-    # TODO: Implement khi có API thật
-    # Ví dụ: OpenAI, Gemini, Claude, etc.
-    return "Chế độ AI thật chưa kích hoạt trong phiên bản này."
+    if not GEMINI_AVAILABLE:
+        return "❌ Google Generative AI chưa được cài đặt. Chạy: pip install google-generativeai"
+    
+    if not GEMINI_API_KEY:
+        return "❌ Chưa có GEMINI_API_KEY. Vui lòng thêm vào file .env hoặc Streamlit Secrets"
+    
+    try:
+        # Chuẩn bị prompt cho Gemini
+        symbol = json_data.get('symbol', 'cổ phiếu')
+        trend = json_data.get('trend', 'Sideways')
+        signal = json_data.get('signal', 'HOLD')
+        indicators = json_data.get('technical_indicators', {})
+        reason = json_data.get('reason', '')
+        
+        # Lấy giá trị chỉ báo
+        rsi = indicators.get('RSI14', 50)
+        sma7 = indicators.get('SMA7', 0)
+        sma30 = indicators.get('SMA30', 0)
+        current_price = json_data.get('current_price', 0)
+        forecast_price = json_data.get('forecast_price', 0)
+        
+        prompt = f"""
+Bạn là một chuyên gia phân tích tài chính AI. Dựa trên dữ liệu phân tích kỹ thuật sau, hãy đưa ra lời khuyên đầu tư ngắn gọn và chuyên nghiệp bằng tiếng Việt:
+
+**Thông tin cổ phiếu:**
+- Mã cổ phiếu: {symbol}
+- Giá hiện tại: ${current_price:.2f}
+- Giá dự báo: ${forecast_price:.2f}
+
+**Phân tích kỹ thuật:**
+- Xu hướng: {trend}
+- Tín hiệu: {signal}
+- RSI (14): {rsi:.1f}
+- SMA 7 ngày: ${sma7:.2f}
+- SMA 30 ngày: ${sma30:.2f}
+- Lý do: {reason}
+
+**Yêu cầu:**
+1. Đưa ra lời khuyên đầu tư rõ ràng (mua/bán/giữ)
+2. Giải thích ngắn gọn lý do
+3. Cảnh báo rủi ro
+4. Giới hạn trong 150 từ
+5. Sử dụng ngôn ngữ chuyên nghiệp nhưng dễ hiểu
+
+**Lưu ý:** Đây chỉ là phân tích kỹ thuật, không phải lời khuyên đầu tư chính thức.
+"""
+        
+        # Gọi Gemini API
+        response = gemini_model.generate_content(prompt)
+        
+        if response and response.text:
+            return response.text.strip()
+        else:
+            return "❌ Không nhận được phản hồi từ Gemini API"
+            
+    except Exception as e:
+        error_msg = f"❌ Lỗi khi gọi Gemini API: {str(e)}"
+        print(error_msg)
+        return error_msg
