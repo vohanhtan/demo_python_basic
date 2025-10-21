@@ -1,0 +1,8 @@
+﻿symbol,latest_price,trend,signal,reason,ai_advice,generated_at,technical_indicators,forecast_next_days
+MSFT,513.58,Sideways,HOLD,"[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng","Tín hiệu chưa rõ ràng cho MSFT, nên quan sát thêm. Thị trường đang sideways, chờ breakout. Lưu ý: Đầu tư có rủi ro, cần quản lý vốn hợp lý. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",2025-10-21T14:54:56,"{'SMA7': 514.23, 'SMA30': 512.78, 'RSI14': 46.01}","[510.41, 510.68, 510.94, 511.21, 511.48]"
+VNINDEX,1006.2,Uptrend,HOLD,[Fallback Linear] Xu hướng tăng nhưng cần chờ SMA7 vượt SMA31,"Phân tích cho thấy VNINDEX đang trong giai đoạn chờ đợi. RSI quá bán, có thể phục hồi. Cảnh báo: Thị trường biến động, cần theo dõi sát sao. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",2025-10-21T15:18:10,"{'SMA7': 1061.14, 'SMA30': 1185.13, 'RSI14': 16.19}","[1028.67, 1028.6, 1028.53, 1028.47, 1028.4]"
+AAPL,262.24,Sideways,SELL,"Thị trường sideways, RSI quá mua, nên bán","**Khuyến nghị:** BÁN cổ phiếu AAPL.
+
+**Lý do:** Phân tích kỹ thuật cho thấy AAPL đang giao dịch trong xu hướng sideways. Chỉ số RSI (71.2) báo hiệu cổ phiếu đang trong vùng quá mua. Mặc dù SMA 7 ngày cao hơn SMA 30 ngày, tín hiệu SELL mạnh hơn do RSI và xu hướng sideways.
+
+**Cảnh báo:** Đây là phân tích kỹ thuật dựa trên dữ liệu hiện tại. Thị trường có thể biến động bất ngờ. Hãy xem xét kỹ lưỡng tình hình tài chính cá nhân và các yếu tố vĩ mô trước khi đưa ra quyết định đầu tư. Tham khảo thêm ý kiến của chuyên gia tài chính độc lập.",2025-10-21T17:06:19,"{'SMA7': 250.29, 'SMA30': 248.49, 'RSI14': 71.25}","[255.32, 257.05, 258.78, 260.5, 262.23]"

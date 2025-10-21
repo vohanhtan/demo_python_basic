@@ -28,4 +28,4 @@ yfinance>=0.2.18
 # seaborn>=0.12.0         # Statistical visualization
 # requests>=2.31.0        # HTTP requests (future API integration)
 # openai>=1.0.0           # OpenAI API (future AI integration)
-# google-generativeai>=0.3.0  # Google Gemini API (future AI integration)
+google-generativeai>=0.3.0  # Google Gemini API
