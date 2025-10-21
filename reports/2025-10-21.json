@@ -1,0 +1,28 @@
+{
+    "date": "2025-10-21",
+    "records": [
+        {
+            "symbol": "VNINDEX",
+            "latest_price": 1040.54,
+            "trend": "Sideways",
+            "signal": "HOLD",
+            "reason": "[Fallback Linear] Thị trường sideways, RSI trung tính, chờ tín hiệu rõ ràng",
+            "ai_advice": "AI khuyến nghị giữ nguyên vị thế VNINDEX hiện tại. Thị trường đang sideways, chờ breakout. Khuyến nghị: Chỉ đầu tư số tiền có thể chấp nhận mất. Cần kiên nhẫn chờ tín hiệu rõ ràng hơn.",
+            "generated_at": "2025-10-21T15:11:19",
+            "technical_indicators": {
+                "SMA7": 1041.56,
+                "SMA30": 1046.65,
+                "RSI14": 48.61
+            },
+            "forecast_next_days": [
+                1037.91,
+                1037.91,
+                1037.91,
+                1037.91,
+                1037.92,
+                1037.92,
+                1037.92
+            ]
+        }
+    ]
+}
