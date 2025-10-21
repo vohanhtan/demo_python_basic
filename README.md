@@ -6,7 +6,7 @@
 
 - **Phân tích kỹ thuật**: SMA(7), SMA(30), RSI(14) với tính toán chính xác
 - **Dự đoán ngắn hạn**: Linear Regression + fallback thông minh cho 3-10 ngày
-- **AI Advice**: Lời khuyên giả lập thông minh (chuẩn bị cho API thật)
+- **AI Advice**: Lời khuyên từ Google Gemini AI (có thể bật/tắt)
 - **Biểu đồ đa dạng**: 
   - 📊 Biểu đồ giá (Line chart với MA)
   - 🕯️ Biểu đồ Candlestick (OHLC + Volume)
@@ -28,10 +28,10 @@ pip install -r requirements.txt
 
 ```bash
 # Tạo file .env từ template
-cp env_template.txt .env
+cp env.example .env
 
-# Hoặc chạy script
-python3 create_env.py
+# Chỉnh sửa file .env với API key của bạn
+nano .env
 ```
 
 **Các thư viện chính:**
@@ -44,6 +44,7 @@ python3 create_env.py
 - **python-dateutil>=2.8.2**: Xử lý ngày tháng
 - **python-dotenv>=1.0.0**: Đọc file .env
 - **fpdf>=1.7.2**: Tạo file PDF với biểu đồ
+- **google-generativeai>=0.3.0**: Google Gemini API cho AI advice
 
 ### 3. Chạy ứng dụng
 
@@ -55,12 +56,48 @@ streamlit run app.py
 
 Mở trình duyệt và truy cập: `http://localhost:8501`
 
+## 🔐 Cấu hình API Key an toàn khi deploy
+
+### 🏠 Chạy local
+- Tạo file `.env` ở thư mục gốc:
+
+```env
+# Google Gemini API Key (để trống nếu chưa có)
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Chế độ AI thật
+USE_REAL_AI=True
+```
+
+- Đảm bảo `.env` đã nằm trong `.gitignore`.
+
+### ☁️ Deploy lên Streamlit Cloud
+- Mở trang app trên Streamlit Cloud → **Settings → Secrets**.
+- Dán key theo format:
+
+```toml
+GEMINI_API_KEY = "your_gemini_api_key_here"
+USE_REAL_AI = "True"
+```
+
+- Trong code, các biến này sẽ được đọc qua:
+```python
+from config.secrets_helper import get_secret
+GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
+USE_REAL_AI = get_secret("USE_REAL_AI", "False").lower() == "true"
+```
+
+✅ **Không bao giờ commit key API hoặc file .env lên GitHub public.**
+
 ## ⚙️ Cấu hình .env
 
 File `.env` cho phép cấu hình các tùy chọn:
 
 ```env
-# Chế độ AI thật (hiện chưa dùng — để False)
+# Google Gemini API Key (để trống nếu chưa có)
+GEMINI_API_KEY=
+
+# Chế độ AI thật (True để bật Gemini AI)
 USE_REAL_AI=False
 
 # Định dạng export: csv | pdf | both
@@ -77,7 +114,8 @@ MIN_SYMBOLS_FOR_CHART=2
 ```
 
 ### Các tùy chọn:
-- **USE_REAL_AI**: `True` để bật AI thật (chưa implement)
+- **GEMINI_API_KEY**: API key từ Google AI Studio để sử dụng Gemini AI
+- **USE_REAL_AI**: `True` để bật Gemini AI, `False` để dùng logic giả lập
 - **EXPORT_FORMAT**: `csv`, `pdf`, hoặc `both`
 - **REPORT_DIR**: Thư mục lưu file log (mặc định: `reports`)
 - **EXPORT_DIR**: Thư mục xuất file CSV/PDF (mặc định: `export`)
@@ -91,18 +129,15 @@ demo_python_basic/
 ├── data_service.py        # Đọc và lọc dữ liệu CSV
 ├── indicators.py          # Tính SMA và RSI
 ├── predictor.py           # Dự đoán bằng Linear Regression
-├── ai_module.py           # AI advice (giả lập)
+├── ai_module.py           # AI advice (Gemini AI + giả lập)
 ├── logger.py              # Ghi log JSON theo ngày + Export CSV/PDF
 ├── visualizer.py          # Vẽ biểu đồ (Line, Candlestick, Combined)
 ├── utils.py               # Hàm tiện ích + Config .env
+├── config/                # Module cấu hình bảo mật
+│   └── secrets_helper.py  # Hàm get_secret() cho API keys
 ├── requirements.txt       # Dependencies (bao gồm mplfinance)
 ├── README.md              # Hướng dẫn chi tiết
 ├── .env                   # File cấu hình (tự tạo)
-├── data/                  # Dữ liệu CSV (12 mã cổ phiếu)
-│   ├── FPT.csv, VNM.csv, VIC.csv, HPG.csv
-│   ├── MWG.csv, VCB.csv, SSI.csv, PNJ.csv
-│   └── GAS.csv, VHM.csv, STB.csv, BVH.csv
-├── generate_stock_data.py # Script tạo dữ liệu giả lập
 ├── reports/               # Log files (tự động tạo)
 │   └── YYYY-MM-DD.json
 └── export/                # File export CSV/PDF (tự động tạo)
@@ -179,91 +214,39 @@ demo_python_basic/
 - **BÁN**: SMA(7) < SMA(30) + RSI > 30 (chưa quá bán)
 - **HOLD**: Các chỉ báo mâu thuẫn hoặc không rõ ràng
 
-## 📊 Dữ liệu mẫu
+## 📊 Dữ liệu thời gian thực
 
-Dự án đi kèm dữ liệu mẫu cho **12 mã cổ phiếu** với 150 ngày giao dịch:
+Dự án sử dụng dữ liệu thời gian thực từ Yahoo Finance:
 
-### 🏢 Danh sách mã cổ phiếu
-- **FPT**: Công nghệ thông tin (ổn định, tăng đều)
-- **VNM**: Thực phẩm (dao động trung bình)
-- **VIC**: Bất động sản (biến động mạnh)
-- **HPG**: Thép (sóng trung bình)
-- **MWG**: Bán lẻ (dao động ngắn)
-- **VCB**: Ngân hàng (tăng ổn định)
-- **SSI**: Chứng khoán (tăng/giảm thất thường)
-- **PNJ**: Vàng bạc (sóng nhẹ)
-- **GAS**: Khí đốt (có shock giảm)
-- **VHM**: Bất động sản (ổn định nhẹ)
-- **STB**: Ngân hàng (dao động mạnh)
-- **BVH**: Bảo hiểm (trung bình)
+### 🏢 Danh sách mã cổ phiếu hỗ trợ
+- **AAPL**: Apple Inc. (Công nghệ)
+- **MSFT**: Microsoft Corporation (Công nghệ)
+- **TSLA**: Tesla Inc. (Xe điện)
+- **NVDA**: NVIDIA Corporation (Bán dẫn)
+- **GOOG**: Alphabet Inc. (Công nghệ)
+- **META**: Meta Platforms Inc. (Mạng xã hội)
+- **AMZN**: Amazon.com Inc. (Thương mại điện tử)
+- **NFLX**: Netflix Inc. (Streaming)
+- **AMD**: Advanced Micro Devices (Bán dẫn)
+- **JPM**: JPMorgan Chase & Co. (Ngân hàng)
 
-### 📁 Format CSV
+### 📁 Format dữ liệu
 ```csv
 Date,Symbol,Open,High,Low,Close,Volume
-2025-05-19,FPT,88.95,89.77,88.72,89.19,2082196
-2025-05-20,FPT,86.14,86.8,85.54,86.3,2119771
+2025-10-17,AAPL,247.25,248.10,246.50,247.80,45234567
+2025-10-18,AAPL,248.00,249.50,247.20,248.90,38912345
 ```
 
-## 🔄 Tạo dữ liệu giả lập
-
-### 📊 Script generate_stock_data.py
-
-Dự án bao gồm script `generate_stock_data.py` để tạo dữ liệu cổ phiếu giả lập "như thật":
-
-#### 🎯 Tính năng
-- **12 mã cổ phiếu**: FPT, VNM, VIC, HPG, MWG, VCB, SSI, PNJ, GAS, VHM, STB, BVH
-- **150 ngày giao dịch**: Dữ liệu từ ngày hiện tại trở về trước
-- **Thuật toán realistic**: Random Walk + Sine Wave + Noise + Shock
-- **Tham số khác nhau**: Mỗi mã có base price, trend strength, volatility riêng
-
-#### 🧮 Thuật toán sinh dữ liệu
-```python
-# Kết hợp nhiều yếu tố:
-- Xu hướng tăng theo thời gian (trend_strength)
-- Sóng dao động chu kỳ (5 chu kỳ trong 150 ngày)
-- Nhiễu ngẫu nhiên (random noise)
-- Random walk với volatility
-- Cú sốc bất ngờ (-7% hoặc +7%)
-```
-
-#### 📈 Tham số cho từng mã
-| Mã | Base | Trend | Volatility | Đặc điểm |
-|----|------|-------|------------|----------|
-| FPT | 90 | 3.0 | 0.013 | ổn định, tăng đều |
-| VNM | 70 | 2.0 | 0.018 | dao động trung bình |
-| VIC | 52 | 1.5 | 0.022 | biến động mạnh |
-| HPG | 38 | 2.5 | 0.020 | sóng trung bình |
-| MWG | 40 | 1.8 | 0.021 | dao động ngắn |
-| VCB | 95 | 3.5 | 0.012 | tăng ổn định |
-| SSI | 32 | 2.2 | 0.024 | tăng/giảm thất thường |
-| PNJ | 90 | 3.2 | 0.017 | sóng nhẹ |
-| GAS | 85 | 1.2 | 0.019 | có shock giảm |
-| VHM | 50 | 2.8 | 0.015 | ổn định nhẹ |
-| STB | 32 | 2.0 | 0.023 | dao động mạnh |
-| BVH | 47 | 1.5 | 0.018 | trung bình |
-
-#### 🚀 Cách sử dụng
-```bash
-# Tạo dữ liệu cho tất cả 12 mã (150 ngày)
-python3 generate_stock_data.py
-
-# Tạo dữ liệu với số ngày tùy chỉnh
-python3 generate_stock_data.py --days 100
-
-# Tạo dữ liệu + vẽ biểu đồ preview
-python3 generate_stock_data.py --plot
-```
-
-#### 📊 Kết quả
-- **12 file CSV**: `data/FPT.csv`, `data/VNM.csv`, ..., `data/BVH.csv`
-- **Header chuẩn**: `Date,Symbol,Open,High,Low,Close,Volume`
-- **Dữ liệu realistic**: Có sóng, shock, volume biến động hợp lý
-- **Tương thích**: Hoạt động ngay với Streamlit app
+### ⏰ Lưu ý về thời gian
+- **Thị trường Mỹ**: Mở cửa Thứ 2-6, 9:30 AM - 4:00 PM ET
+- **Cuối tuần**: Không có dữ liệu mới (Thứ 7, Chủ nhật)
+- **Delay dữ liệu**: Yahoo Finance có thể delay 1-2 ngày
+- **Timezone**: Dữ liệu theo giờ New York (ET)
 
 ## 🔧 Cách sử dụng
 
-1. **Chọn mã cổ phiếu**: 12 mã có sẵn (FPT, VNM, VIC, HPG, MWG, VCB, SSI, PNJ, GAS, VHM, STB, BVH)
-2. **Thiết lập khoảng thời gian**: Ngày bắt đầu và kết thúc (mặc định 60 ngày gần nhất)
+1. **Chọn mã cổ phiếu**: 10 mã cổ phiếu Mỹ (AAPL, MSFT, TSLA, NVDA, GOOG, META, AMZN, NFLX, AMD, JPM)
+2. **Thiết lập khoảng thời gian**: Ngày bắt đầu và kết thúc (mặc định 30 ngày gần nhất)
 3. **Số ngày dự đoán**: 1-10 ngày (mặc định 5 ngày)
 4. **Nhấn "Phân tích"**: Xem kết quả chi tiết
 5. **Xem biểu đồ**: 3 loại biểu đồ hiển thị theo chiều dọc:
@@ -303,13 +286,27 @@ python3 generate_stock_data.py --plot
 
 ## 🤖 AI Module
 
-Hiện tại sử dụng logic rule-based để tạo lời khuyên. Có thể dễ dàng thay thế bằng API thật:
+Hệ thống AI hỗ trợ cả Gemini AI thật và logic giả lập:
 
-```python
-# Trong ai_module.py
-def call_real_ai_api(result_json: dict) -> str:
-    # TODO: Implement với OpenAI/Gemini/Claude
-    pass
+### 🧠 Google Gemini AI (AI thật)
+- **API**: Google Generative AI (Gemini 2.0 Flash)
+- **Prompt**: Chuyên gia phân tích tài chính
+- **Output**: Lời khuyên đầu tư bằng tiếng Việt
+- **Format**: Markdown với **bold** và *italic*
+
+### 🎭 Logic giả lập (Fallback)
+- **Rule-based**: Dựa trên tín hiệu và chỉ báo kỹ thuật
+- **Templates**: Lời khuyên có sẵn cho từng trường hợp
+- **Risk warning**: Cảnh báo rủi ro tự động
+
+### ⚙️ Cách bật/tắt
+```env
+# Bật Gemini AI
+USE_REAL_AI=True
+GEMINI_API_KEY=your_api_key_here
+
+# Tắt Gemini AI (dùng logic giả lập)
+USE_REAL_AI=False
 ```
 
 ## 📝 Logging
@@ -335,8 +332,8 @@ Kết quả phân tích được ghi vào `reports/YYYY-MM-DD.json`:
 
 ## ⚠️ Lưu ý quan trọng
 
-- **Không kết nối API thật**: Chỉ sử dụng dữ liệu CSV nội bộ
-- **AI giả lập**: Lời khuyên hiện tại là rule-based thông minh
+- **AI hỗ trợ**: Gemini AI thật + logic giả lập fallback
+- **Bảo mật**: Hệ thống secrets an toàn cho API keys
 - **Không phải lời khuyên đầu tư**: Chỉ là phân tích kỹ thuật
 - **Dữ liệu mẫu**: CSV được tạo giả lập cho demo (~90 ngày)
 - **Xử lý lỗi tốt**: Ứng dụng không crash, có fallback thông minh
@@ -350,7 +347,8 @@ Kết quả phân tích được ghi vào `reports/YYYY-MM-DD.json`:
 - [x] Export PDF với biểu đồ tích hợp
 - [x] Config .env linh hoạt
 - [x] Ngưỡng vẽ biểu đồ tổng quan
-- [ ] Tích hợp API thật (OpenAI, Gemini, Claude)
+- [x] Tích hợp Google Gemini AI
+- [x] Hệ thống secrets bảo mật
 - [ ] Thêm nhiều chỉ báo kỹ thuật (MACD, Bollinger Bands)
 - [ ] Kết nối dữ liệu thời gian thực
 - [ ] Thêm machine learning models (LSTM, Prophet)
@@ -371,10 +369,10 @@ streamlit run app.py
 ```
 
 ### Lỗi dữ liệu
-- Kiểm tra file CSV trong thư mục `data/`
-- Đảm bảo format đúng: Date,Symbol,Open,High,Low,Close,Volume
-- Dữ liệu mẫu cho 12 mã cổ phiếu đã có sẵn
-- Nếu thiếu dữ liệu, chạy: `python3 generate_stock_data.py`
+- Kiểm tra kết nối internet để tải dữ liệu từ Yahoo Finance
+- Đảm bảo mã cổ phiếu đúng (AAPL, MSFT, TSLA, NVDA, GOOG, META, AMZN, NFLX, AMD, JPM)
+- Dữ liệu có thể delay 1-2 ngày so với thời gian thực
+- Cuối tuần không có dữ liệu mới
 
 ### Lỗi matplotlib
 ```bash

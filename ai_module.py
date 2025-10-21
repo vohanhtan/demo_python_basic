@@ -7,7 +7,7 @@ Sau này sẽ thay thế bằng API thật (OpenAI/Gemini/Claude)
 import random
 import os
 from typing import Dict
-from utils import get_config
+from config.secrets_helper import get_secret
 
 # Import Google Generative AI
 try:
@@ -17,9 +17,9 @@ except ImportError:
     GEMINI_AVAILABLE = False
     print("⚠️ Google Generative AI chưa được cài đặt. Chạy: pip install google-generativeai")
 
-# Flag để bật/tắt AI thật - đọc từ .env
-USE_REAL_AI = get_config("USE_REAL_AI", "False").lower() == "true"
-GEMINI_API_KEY = get_config("GEMINI_API_KEY", "")
+# Flag để bật/tắt AI thật - đọc từ secrets
+USE_REAL_AI = get_secret("USE_REAL_AI", "False").lower() == "true"
+GEMINI_API_KEY = get_secret("GEMINI_API_KEY", "")
 
 # Cấu hình Gemini nếu có API key
 if GEMINI_AVAILABLE and GEMINI_API_KEY:
@@ -326,7 +326,7 @@ def call_real_ai_api(json_data: dict) -> str:
         return "❌ Google Generative AI chưa được cài đặt. Chạy: pip install google-generativeai"
     
     if not GEMINI_API_KEY:
-        return "❌ Chưa có GEMINI_API_KEY. Vui lòng thêm vào file .env"
+        return "❌ Chưa có GEMINI_API_KEY. Vui lòng thêm vào file .env hoặc Streamlit Secrets"
     
     try:
         # Chuẩn bị prompt cho Gemini
